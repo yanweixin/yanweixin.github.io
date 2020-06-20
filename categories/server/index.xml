@@ -6,10 +6,19 @@
     <description>Recent content in server on A Programmer&#39;s Home</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 20 Nov 2019 08:52:44 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 19 Jun 2020 21:44:42 +0800</lastBuildDate>
     
 	<atom:link href="https://yanweixin.github.io/categories/server/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Podman教程</title>
+      <link>https://yanweixin.github.io/post/podman-tutorial/</link>
+      <pubDate>Fri, 19 Jun 2020 21:44:42 +0800</pubDate>
+      
+      <guid>https://yanweixin.github.io/post/podman-tutorial/</guid>
+      <description>Podman 安装与使用 Ubuntu安装 官方安装教程 1 2 3 4 5 . /etc/os-release sudo sh -c &amp;#34;echo &amp;#39;deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /&amp;#39; &amp;gt; /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list&amp;#34; curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/Release.key | sudo apt-key add - sudo apt-get update -qq sudo apt-get -qq -y install podman 由于按照上述方法未安装成功，按照</description>
+    </item>
     
     <item>
       <title>SSH使用</title>
@@ -18,6 +27,15 @@
       
       <guid>https://yanweixin.github.io/post/ssh-usage/</guid>
       <description>OpenSSH 安装 Windows SSH客户端和服务器在Windows上安装都很复杂又麻烦，是本教程重点。 通过设置面板安装OpenSSH 需Windows Server 2019和W</description>
+    </item>
+    
+    <item>
+      <title>Docker基础</title>
+      <link>https://yanweixin.github.io/post/docker-basics/</link>
+      <pubDate>Thu, 20 Jun 2019 08:11:06 +0800</pubDate>
+      
+      <guid>https://yanweixin.github.io/post/docker-basics/</guid>
+      <description>Docker基础 安装与配置 安装 步骤 下载&amp;amp;安装 1 2 3 # https://download.docker.com/linux/static/stable/ curl https://download.docker.com/linux/static/stable/x86_64/docker-19.03.5.tgz -o docker-19.03.5.tgz &amp;amp;&amp;amp; mkdir docker &amp;amp;&amp;amp; tar xzf docker-19.03.5.tgz -C docker --strip-components=1 sudo mv docker /usr/local/bin 启动 1 2 3 4 5 6 7 8 # 1. Start the Docker daemon sudo dockerd &amp;amp; # 2.</description>
     </item>
     
   </channel>

@@ -91,7 +91,7 @@
 var doNotTrack = false;
 if (!doNotTrack) {
 	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-	ga('create', 'UA-140868062-1', 'auto');
+	ga('create', 'UA-140868062-2', 'auto');
 	
 	ga('send', 'pageview');
 }
@@ -392,7 +392,10 @@ if (!doNotTrack) {
         <time datetime="2020-06-19" class="post-time">
           2020-06-19
         </time>
-        
+        <div class="post-category">
+            <a href="https://yanweixin.github.io/categories/server/"> server </a>
+            
+          </div>
         <span class="more-meta"> 1506 words </span>
           <span class="more-meta"> 4 min read </span>
 
@@ -887,10 +890,10 @@ podman rmi <span class="k">$(</span>podman images -q<span class="k">)</span>
         link: decodeURI(location.href),
         desc: 'Podman 安装与使用 Ubuntu安装 官方安装教程 1 2 3 4 5 . \/etc\/os-release sudo sh -c \u0026#34;echo \u0026#39;deb https:\/\/download.opensuse.org\/repositories\/devel:\/kubic:\/libcontainers:\/stable\/xUbuntu_${VERSION_ID}\/ \/\u0026#39; \u0026gt; \/etc\/apt\/sources.list.d\/devel:kubic:libcontainers:stable.list\u0026#34; curl -L https:\/\/download.opensuse.org\/repositories\/devel:\/kubic:\/libcontainers:\/stable\/xUbuntu_${VERSION_ID}\/Release.key | sudo apt-key add - sudo apt-get update -qq sudo apt-get -qq -y install podman 由于按照上述方法未安装成功，按照',
         owner: 'yanweixin',
-        repo: '',
+        repo: 'yanweixin\/comments-for-yanweixin',
         oauth: {
-          client_id: '',
-          client_secret: ''
+          client_id: '4fcc40337476b3ed92f0',
+          client_secret: 'a74e95bfeeeac10673b57c6b84b8f75d7628a0d7'
         }
       })
       gitment.render('comments-gitment')
