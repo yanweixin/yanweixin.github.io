@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>database on A Programmer&#39;s Home</title>
+    <link>http://yanweixin.github.io/categories/database/</link>
+    <description>Recent content in database on A Programmer&#39;s Home</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 20 Oct 2019 09:21:53 +0800</lastBuildDate>
+    
+	<atom:link href="http://yanweixin.github.io/categories/database/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Sqlserver管理</title>
+      <link>http://yanweixin.github.io/post/sqlserver-admin/</link>
+      <pubDate>Sun, 20 Oct 2019 09:21:53 +0800</pubDate>
+      
+      <guid>http://yanweixin.github.io/post/sqlserver-admin/</guid>
+      <description>SQL Server基础 安装 Docker 获取容器镜像 启用IPV4端口转发： 1 2 3 4 5 6 sudo gedit /etc/sysctl.conf # 添加如下内容： net.ipv4.ip_forward=1 systemctl restart network sudo sysctl -p sysctl net.ipv4.ip_forward 启动docker daemon之</description>
+    </item>
+    
+    <item>
+      <title>MySQL数据库管理</title>
+      <link>http://yanweixin.github.io/post/mysql-admin/</link>
+      <pubDate>Sat, 20 Apr 2019 09:00:44 +0800</pubDate>
+      
+      <guid>http://yanweixin.github.io/post/mysql-admin/</guid>
+      <description>数据库管理 安装与升级 配置文件 默认选项从一下文件的给定顺序依次读取： 1 2 3 C:\WINDOWS\my.ini C:\WINDOWS\my.cnf C:\my.ini C:\my.cnf D:\InstallPath\mysql\my.ini D:\InstallPath\mysql\my.cnf 在解压根目录新建文件my.ini，内容如下： 1 2 3 4 5 6</description>
+    </item>
+    
+    <item>
+      <title>Oracle数据库管理</title>
+      <link>http://yanweixin.github.io/post/oracle-admin/</link>
+      <pubDate>Wed, 20 Feb 2019 09:22:05 +0800</pubDate>
+      
+      <guid>http://yanweixin.github.io/post/oracle-admin/</guid>
+      <description>数据库起步 安装 Docker安装 构建Docker镜像 1 git clone --depth=1 https://github.com/oracle/docker-images.git 在Oracle Technology Network下载所需的数据库版本，然后放在dockerfile</description>
+    </item>
+    
+  </channel>
+</rss>
