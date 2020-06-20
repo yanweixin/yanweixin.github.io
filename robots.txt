@@ -1,2 +1,2 @@
 User-agent: *
-Sitemap: http://yanweixin.github.io/sitemap.xml
+Sitemap: https://yanweixin.github.io/sitemap.xml

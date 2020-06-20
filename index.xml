@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>A Programmer&#39;s Home</title>
-    <link>http://yanweixin.github.io/</link>
+    <link>https://yanweixin.github.io/</link>
     <description>Recent content on A Programmer&#39;s Home</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Sat, 20 Jun 2020 14:49:21 +0800</lastBuildDate>
     
-        <atom:link href="http://yanweixin.github.io/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="https://yanweixin.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Effective Java</title>
-      <link>http://yanweixin.github.io/post/effective-java/</link>
+      <link>https://yanweixin.github.io/post/effective-java/</link>
       <pubDate>Sat, 20 Jun 2020 14:49:21 +0800</pubDate>
       
-      <guid>http://yanweixin.github.io/post/effective-java/</guid>
+      <guid>https://yanweixin.github.io/post/effective-java/</guid>
       
         <description>&lt;h1 id=&#34;高性能java&#34;&gt;高性能Java&lt;/h1&gt;
 &lt;p&gt;一天一个Effective Java小技巧&lt;/p&gt;
@@ -162,10 +162,10 @@
     
     <item>
       <title>Podman教程</title>
-      <link>http://yanweixin.github.io/post/podman-tutorial/</link>
+      <link>https://yanweixin.github.io/post/podman-tutorial/</link>
       <pubDate>Fri, 19 Jun 2020 21:44:42 +0800</pubDate>
       
-      <guid>http://yanweixin.github.io/post/podman-tutorial/</guid>
+      <guid>https://yanweixin.github.io/post/podman-tutorial/</guid>
       
         <description>&lt;h1 id=&#34;podman&#34;&gt;Podman&lt;/h1&gt;
 &lt;h2 id=&#34;安装与使用&#34;&gt;安装与使用&lt;/h2&gt;
@@ -535,10 +535,10 @@ podman rmi &lt;span class=&#34;k&#34;&gt;$(&lt;/span&gt;podman images -q&lt;span
     
     <item>
       <title>Java自带工具使用</title>
-      <link>http://yanweixin.github.io/post/java-tools/</link>
+      <link>https://yanweixin.github.io/post/java-tools/</link>
       <pubDate>Tue, 16 Jun 2020 13:40:42 +0800</pubDate>
       
-      <guid>http://yanweixin.github.io/post/java-tools/</guid>
+      <guid>https://yanweixin.github.io/post/java-tools/</guid>
       
         <description>&lt;h1 id=&#34;java-tools&#34;&gt;Java Tools&lt;/h1&gt;
 &lt;h2 id=&#34;工具指南&#34;&gt;工具指南&lt;/h2&gt;
@@ -718,10 +718,10 @@ jcmd process_id Thread.print
     
     <item>
       <title>SSH使用</title>
-      <link>http://yanweixin.github.io/post/ssh-usage/</link>
+      <link>https://yanweixin.github.io/post/ssh-usage/</link>
       <pubDate>Wed, 20 Nov 2019 08:52:44 +0800</pubDate>
       
-      <guid>http://yanweixin.github.io/post/ssh-usage/</guid>
+      <guid>https://yanweixin.github.io/post/ssh-usage/</guid>
       
         <description>&lt;h1 id=&#34;openssh&#34;&gt;OpenSSH&lt;/h1&gt;
 &lt;h2 id=&#34;安装&#34;&gt;安装&lt;/h2&gt;
@@ -1063,10 +1063,10 @@ ssh-keygen	-Y verify -f allowed_signers_file -I signer_identity -n namespace -s 
     
     <item>
       <title>Sqlserver管理</title>
-      <link>http://yanweixin.github.io/post/sqlserver-admin/</link>
+      <link>https://yanweixin.github.io/post/sqlserver-admin/</link>
       <pubDate>Sun, 20 Oct 2019 09:21:53 +0800</pubDate>
       
-      <guid>http://yanweixin.github.io/post/sqlserver-admin/</guid>
+      <guid>https://yanweixin.github.io/post/sqlserver-admin/</guid>
       
         <description>&lt;h1 id=&#34;sql-server基础&#34;&gt;SQL Server基础&lt;/h1&gt;
 &lt;h2 id=&#34;安装&#34;&gt;安装&lt;/h2&gt;
@@ -1914,10 +1914,10 @@ ls -l wwi*
     
     <item>
       <title>Docker基础</title>
-      <link>http://yanweixin.github.io/post/docker-basics/</link>
+      <link>https://yanweixin.github.io/post/docker-basics/</link>
       <pubDate>Thu, 20 Jun 2019 08:11:06 +0800</pubDate>
       
-      <guid>http://yanweixin.github.io/post/docker-basics/</guid>
+      <guid>https://yanweixin.github.io/post/docker-basics/</guid>
       
         <description>&lt;h1 id=&#34;docker基础&#34;&gt;Docker基础&lt;/h1&gt;
 &lt;h2 id=&#34;安装与配置&#34;&gt;安装与配置&lt;/h2&gt;
@@ -3919,10 +3919,10 @@ req_extensions = v3_req
     
     <item>
       <title>MySQL数据库管理</title>
-      <link>http://yanweixin.github.io/post/mysql-admin/</link>
+      <link>https://yanweixin.github.io/post/mysql-admin/</link>
       <pubDate>Sat, 20 Apr 2019 09:00:44 +0800</pubDate>
       
-      <guid>http://yanweixin.github.io/post/mysql-admin/</guid>
+      <guid>https://yanweixin.github.io/post/mysql-admin/</guid>
       
         <description>&lt;h1 id=&#34;数据库管理&#34;&gt;数据库管理&lt;/h1&gt;
 &lt;h2 id=&#34;安装与升级&#34;&gt;安装与升级&lt;/h2&gt;
@@ -5164,10 +5164,10 @@ mysqld_safe --user&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;mysql --datadir&lt
     
     <item>
       <title>Oracle数据库管理</title>
-      <link>http://yanweixin.github.io/post/oracle-admin/</link>
+      <link>https://yanweixin.github.io/post/oracle-admin/</link>
       <pubDate>Wed, 20 Feb 2019 09:22:05 +0800</pubDate>
       
-      <guid>http://yanweixin.github.io/post/oracle-admin/</guid>
+      <guid>https://yanweixin.github.io/post/oracle-admin/</guid>
       
         <description>&lt;h1 id=&#34;数据库起步&#34;&gt;数据库起步&lt;/h1&gt;
 &lt;h2 id=&#34;安装&#34;&gt;安装&lt;/h2&gt;
@@ -5583,10 +5583,10 @@ ALTER USER account IDENTIFIED BY password ACCOUNT UNLOCK&lt;span class=&#34;p&#3
     
     <item>
       <title>Hugo教程</title>
-      <link>http://yanweixin.github.io/post/hugo-tutorial/</link>
+      <link>https://yanweixin.github.io/post/hugo-tutorial/</link>
       <pubDate>Tue, 01 Jan 2019 21:34:48 +0800</pubDate>
       
-      <guid>http://yanweixin.github.io/post/hugo-tutorial/</guid>
+      <guid>https://yanweixin.github.io/post/hugo-tutorial/</guid>
       
         <description>&lt;h2 id=&#34;开始&#34;&gt;开始&lt;/h2&gt;
 &lt;h3 id=&#34;快速开始&#34;&gt;快速开始&lt;/h3&gt;

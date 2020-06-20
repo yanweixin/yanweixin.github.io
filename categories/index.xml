@@ -2,39 +2,39 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on A Programmer&#39;s Home</title>
-    <link>http://yanweixin.github.io/categories/</link>
+    <link>https://yanweixin.github.io/categories/</link>
     <description>Recent content in Categories on A Programmer&#39;s Home</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Sat, 20 Jun 2020 14:49:21 +0800</lastBuildDate>
     
-	<atom:link href="http://yanweixin.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://yanweixin.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>java</title>
-      <link>http://yanweixin.github.io/categories/java/</link>
+      <link>https://yanweixin.github.io/categories/java/</link>
       <pubDate>Sat, 20 Jun 2020 14:49:21 +0800</pubDate>
       
-      <guid>http://yanweixin.github.io/categories/java/</guid>
+      <guid>https://yanweixin.github.io/categories/java/</guid>
       <description></description>
     </item>
     
     <item>
       <title>server</title>
-      <link>http://yanweixin.github.io/categories/server/</link>
+      <link>https://yanweixin.github.io/categories/server/</link>
       <pubDate>Wed, 20 Nov 2019 08:52:44 +0800</pubDate>
       
-      <guid>http://yanweixin.github.io/categories/server/</guid>
+      <guid>https://yanweixin.github.io/categories/server/</guid>
       <description></description>
     </item>
     
     <item>
       <title>database</title>
-      <link>http://yanweixin.github.io/categories/database/</link>
+      <link>https://yanweixin.github.io/categories/database/</link>
       <pubDate>Sun, 20 Oct 2019 09:21:53 +0800</pubDate>
       
-      <guid>http://yanweixin.github.io/categories/database/</guid>
+      <guid>https://yanweixin.github.io/categories/database/</guid>
       <description></description>
     </item>
     
