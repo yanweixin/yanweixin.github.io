@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>java on A Programmer&#39;s Home</title>
+    <link>http://yanweixin.github.io/categories/java/</link>
+    <description>Recent content in java on A Programmer&#39;s Home</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 20 Jun 2020 14:49:21 +0800</lastBuildDate>
+    
+	<atom:link href="http://yanweixin.github.io/categories/java/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Effective Java</title>
+      <link>http://yanweixin.github.io/post/effective-java/</link>
+      <pubDate>Sat, 20 Jun 2020 14:49:21 +0800</pubDate>
+      
+      <guid>http://yanweixin.github.io/post/effective-java/</guid>
+      <description>高性能Java 一天一个Effective Java小技巧 创建与销毁对象 用静态工厂方法取代构造器 例子： 1 2 3 public static Boolean valueOf(boolean b) { return b ? Boolean.TRUE : Boolean.FALSE; } 使用静态工</description>
+    </item>
+    
+    <item>
+      <title>Java自带工具使用</title>
+      <link>http://yanweixin.github.io/post/java-tools/</link>
+      <pubDate>Tue, 16 Jun 2020 13:40:42 +0800</pubDate>
+      
+      <guid>http://yanweixin.github.io/post/java-tools/</guid>
+      <description>Java Tools 工具指南 jshell Java交互式命令 jshell [options] [load-files] load-files是命令启动时运行的一个或多个脚本文件，可以包含任何有效代码片段或JShell命令。</description>
+    </item>
+    
+  </channel>
+</rss>

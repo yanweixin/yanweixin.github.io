@@ -3,7 +3,35 @@
   
   <url>
     <loc>http://yanweixin.github.io/</loc>
-    <lastmod>2020-06-19T21:44:42+08:00</lastmod>
+    <lastmod>2020-06-20T14:49:21+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://yanweixin.github.io/categories/</loc>
+    <lastmod>2020-06-20T14:49:21+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://yanweixin.github.io/post/effective-java/</loc>
+    <lastmod>2020-06-20T14:49:21+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://yanweixin.github.io/categories/java/</loc>
+    <lastmod>2020-06-20T14:49:21+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://yanweixin.github.io/post/</loc>
+    <lastmod>2020-06-20T14:49:21+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -16,15 +44,8 @@
   </url>
   
   <url>
-    <loc>http://yanweixin.github.io/post/</loc>
-    <lastmod>2020-06-19T21:44:42+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>http://yanweixin.github.io/categories/</loc>
-    <lastmod>2019-11-20T08:52:44+08:00</lastmod>
+    <loc>http://yanweixin.github.io/post/java-tools/</loc>
+    <lastmod>2020-06-16T13:40:42+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>

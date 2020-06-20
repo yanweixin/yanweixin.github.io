@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Hugo教程 - A Programmer&#39;s Home</title>
+  <title>Effective Java - A Programmer&#39;s Home</title>
   
 
 <meta name="renderer" content="webkit" />
@@ -23,7 +23,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 
 <meta name="author" content="Weixin" />
-  <meta name="description" content="开始 快速开始 安装Hugo 在Hugo项目release页面下载对应平台的Hugo二进制程序，并添加对应环境变量。 通过如下命令确认安装正确 hugo version 创" />
+  <meta name="description" content="高性能Java 一天一个Effective Java小技巧 创建与销毁对象 用静态工厂方法取代构造器 例子： 1 2 3 public static Boolean valueOf(boolean b) { return b ? Boolean.TRUE : Boolean.FALSE; } 使用静态工" />
 
   <meta name="keywords" content="Code, Share, OpenSource" />
 
@@ -35,7 +35,7 @@
 <meta name="generator" content="Hugo 0.72.0" />
 
 
-<link rel="canonical" href="http://yanweixin.github.io/post/hugo-tutorial/" />
+<link rel="canonical" href="http://yanweixin.github.io/post/effective-java/" />
 
 
 
@@ -59,23 +59,23 @@
 
 
 
-<meta property="og:title" content="Hugo教程" />
-<meta property="og:description" content="开始 快速开始 安装Hugo 在Hugo项目release页面下载对应平台的Hugo二进制程序，并添加对应环境变量。 通过如下命令确认安装正确 hugo version 创" />
+<meta property="og:title" content="Effective Java" />
+<meta property="og:description" content="高性能Java 一天一个Effective Java小技巧 创建与销毁对象 用静态工厂方法取代构造器 例子： 1 2 3 public static Boolean valueOf(boolean b) { return b ? Boolean.TRUE : Boolean.FALSE; } 使用静态工" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://yanweixin.github.io/post/hugo-tutorial/" />
-<meta property="article:published_time" content="2019-01-01T21:34:48+08:00" />
-<meta property="article:modified_time" content="2020-06-19T21:40:41+08:00" />
-<meta itemprop="name" content="Hugo教程">
-<meta itemprop="description" content="开始 快速开始 安装Hugo 在Hugo项目release页面下载对应平台的Hugo二进制程序，并添加对应环境变量。 通过如下命令确认安装正确 hugo version 创">
-<meta itemprop="datePublished" content="2019-01-01T21:34:48&#43;08:00" />
-<meta itemprop="dateModified" content="2020-06-19T21:40:41&#43;08:00" />
-<meta itemprop="wordCount" content="3187">
+<meta property="og:url" content="http://yanweixin.github.io/post/effective-java/" />
+<meta property="article:published_time" content="2020-06-20T14:49:21+08:00" />
+<meta property="article:modified_time" content="2020-06-20T14:49:21+08:00" />
+<meta itemprop="name" content="Effective Java">
+<meta itemprop="description" content="高性能Java 一天一个Effective Java小技巧 创建与销毁对象 用静态工厂方法取代构造器 例子： 1 2 3 public static Boolean valueOf(boolean b) { return b ? Boolean.TRUE : Boolean.FALSE; } 使用静态工">
+<meta itemprop="datePublished" content="2020-06-20T14:49:21&#43;08:00" />
+<meta itemprop="dateModified" content="2020-06-20T14:49:21&#43;08:00" />
+<meta itemprop="wordCount" content="1004">
 
 
 
 <meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Hugo教程"/>
-<meta name="twitter:description" content="开始 快速开始 安装Hugo 在Hugo项目release页面下载对应平台的Hugo二进制程序，并添加对应环境变量。 通过如下命令确认安装正确 hugo version 创"/>
+<meta name="twitter:title" content="Effective Java"/>
+<meta name="twitter:description" content="高性能Java 一天一个Effective Java小技巧 创建与销毁对象 用静态工厂方法取代构造器 例子： 1 2 3 public static Boolean valueOf(boolean b) { return b ? Boolean.TRUE : Boolean.FALSE; } 使用静态工"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -386,15 +386,18 @@ if (!doNotTrack) {
           <article class="post bg-white">
     
     <header class="post-header">
-      <h1 class="post-title">Hugo教程</h1>
+      <h1 class="post-title">Effective Java</h1>
       
       <div class="post-meta">
-        <time datetime="2019-01-01" class="post-time">
-          2019-01-01
+        <time datetime="2020-06-20" class="post-time">
+          2020-06-20
         </time>
-        
-        <span class="more-meta"> 3187 words </span>
-          <span class="more-meta"> 7 min read </span>
+        <div class="post-category">
+            <a href="http://yanweixin.github.io/categories/java/"> java </a>
+            
+          </div>
+        <span class="more-meta"> 1004 words </span>
+          <span class="more-meta"> 3 min read </span>
 
         
         
@@ -411,13 +414,14 @@ if (!doNotTrack) {
   <div class="post-toc-content">
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#开始">开始</a>
+    <li><a href="#创建与销毁对象">创建与销毁对象</a>
       <ul>
-        <li><a href="#快速开始">快速开始</a></li>
-        <li><a href="#基本用法">基本用法</a></li>
-        <li><a href="#目录结构">目录结构</a></li>
+        <li><a href="#用静态工厂方法取代构造器">用静态工厂方法取代构造器</a></li>
+        <li><a href="#构造器参数组合比较多时使用builder模式">构造器参数组合比较多时使用Builder模式</a></li>
       </ul>
     </li>
+    <li><a href="#共有方法">共有方法</a></li>
+    <li><a href="#heading"></a></li>
   </ul>
 </nav>
   </div>
@@ -425,136 +429,39 @@ if (!doNotTrack) {
 
     
     <div class="post-content">
-      <h2 id="开始">开始</h2>
-<h3 id="快速开始">快速开始</h3>
-<h4 id="安装hugo">安装Hugo</h4>
-<p>在<a href="https://github.com/gohugoio/hugo.git">Hugo项目</a>release页面<a href="https://github.com/gohugoio/hugo/releases">下载</a>对应平台的Hugo二进制程序，并添加对应环境变量。</p>
-<p>通过如下命令确认安装正确</p>
-<pre><code>hugo version
-</code></pre>
-<h4 id="创建新站点">创建新站点</h4>
-<pre><code>hugo new site quickstart
-</code></pre>
-<p>以上命令会在当前目录下quickstart文件夹中创建新的Hugo站点。</p>
-<h4 id="添加主题">添加主题</h4>
-<p>在<a href="https://themes.gohugo.io/">themes.gohugo.io</a>浏览并选择喜欢的主题：</p>
-<ol>
-<li>使用<a href="https://themes.gohugo.io/hugo-tranquilpeak-theme/">Tranquilpeak</a>主题</li>
-</ol>
+      <h1 id="高性能java">高性能Java</h1>
+<p>一天一个Effective Java小技巧</p>
+<h2 id="创建与销毁对象">创建与销毁对象</h2>
+<h3 id="用静态工厂方法取代构造器">用静态工厂方法取代构造器</h3>
+<p>例子：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">cd</span> quickstart
-git init
-<span class="c1"># git config core.autocrlf false</span>
-git submodule add https://github.com/kakawait/hugo-tranquilpeak-theme.git themes/tranquilpeak
-<span class="nb">echo</span> <span class="s1">&#39;theme = &#34;tranquilpeak&#34;&#39;</span> &gt;&gt; config.toml
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="n">Boolean</span> <span class="nf">valueOf</span><span class="o">(</span><span class="kt">boolean</span> <span class="n">b</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">b</span> <span class="o">?</span> <span class="n">Boolean</span><span class="o">.</span><span class="na">TRUE</span> <span class="o">:</span> <span class="n">Boolean</span><span class="o">.</span><span class="na">FALSE</span><span class="o">;</span>
+<span class="o">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><ol start="2">
-<li>使用<a href="https://themes.gohugo.io/academic/">Academic</a>主题</li>
-</ol>
-<p>使用Academic主题需摒弃之前创建的新站点</p>
+</div><p>使用静态工厂方法的好处：</p>
 <ul>
-<li>使用Git</li>
+<li>静态工厂方法有名字。如果构造器的参数不足以描述返回对象的性质，给静态工厂方法选取一个好名字可以让代码更加便于使用和阅读。而且构造器在相同signature下只能有一个，静态工厂方法没有这种限制，通过提供不同名字可以突出它们的不同。</li>
+<li>静态工厂方法不需要每次调用都创建新对象。这让immutable类可以使用预先构造的实例或缓存构造的实例，避免创建重复的对象。例如<code>Boolean.valueOf(boolean)</code>方法就从不创建对象。如果经常需要相同的对象特别是创建的代价比较高时，这样可以极大地提升性能。静态工厂方法在重复调用每次返回相同的对象可以让类更加严格地控制任意时间存在的实例。</li>
+<li>静态方法工厂可以返回返回类型的任意子类型对象。</li>
+<li>静态方法工厂可以根据输入参数不同返回不同的对象。</li>
+<li>静态工厂方法返回对象的类在写此方法时不存在。</li>
 </ul>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">git clone https://github.com/sourcethemes/academic-kickstart.git quickstart
-<span class="nb">cd</span> quickstart
-git submodule update --init --recursive
-</code></pre></td></tr></table>
-</div>
-</div><ul>
-<li>使用Zip</li>
+<p>静态方法工厂的局限：</p>
+<ul>
+<li>如果只提供静态方法工厂，而没有public或protected的构造器将无法被继承。</li>
+<li>静态方法工厂很难找。可以使用常见的命名规则来避免此弊端。</li>
 </ul>
-<p><a href="https://github.com/sourcethemes/academic-kickstart/archive/master.zip">下载</a>并解压到当前文件夹，可改名为喜欢的名字。<a href="https://github.com/gcushen/hugo-academic/archive/master.zip">下载</a>并解压为上一步骤文件夹下<code>themes/academic/</code>目录。</p>
-<ol start="3">
-<li>使用<a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>主题</li>
-</ol>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">git submodule add https://github.com/halogenica/beautifulhugo.git themes/beautiful
-</code></pre></td></tr></table>
-</div>
-</div><ol start="4">
-<li>使用<a href="https://github.com/zwbetz-gh/cayman-hugo-theme">Cayman</a>主题</li>
-</ol>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">git submodule add https://github.com/zwbetz-gh/cayman-hugo-theme.git themes/cayman
-git submodule update --remote --merge <span class="c1"># updating theme</span>
-</code></pre></td></tr></table>
-</div>
-</div><h4 id="添加内容">添加内容</h4>
-<pre><code>hugo new posts/my-first-post.md
-</code></pre>
-<p>如果需要，可以编辑生成的文件。</p>
-<h4 id="启动hugo服务器">启动Hugo服务器</h4>
-<pre><code>hugo server -D
-</code></pre>
-<p>启动Hugo Server并启用<a href="https://gohugo.io/getting-started/usage/#draft-future-and-expired-content">drafts</a></p>
-<p>在<a href="http://localhost:1313/">http://localhost:1313/</a>查看你的新站点。</p>
-<h4 id="生成静态页面">生成静态页面</h4>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash">hugo -D
-</code></pre></td></tr></table>
-</div>
-</div><p>输出默认在./public/，可使用-d/&ndash;destination选项修改，或者在config文件中设置publishdir。</p>
-<h4 id="部署到github-pages">部署到Github Pages</h4>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 1. 确保站点在本地工作</span>
-hugo server
-<span class="c1">#Or</span>
-hugo server -t &lt;YOURTHEME&gt;
-<span class="c1"># 2. Ctrl+C终止服务器并删除public目录</span>
-rm -rf public
-<span class="c1"># 3. 添加子模块</span>
-git submodule add -b master git@github.com:username/username.github.io.git public
-<span class="nb">cd</span> public <span class="o">&amp;&amp;</span> git config user.name UserName <span class="o">&amp;&amp;</span> git config user.email YourEmail <span class="o">&amp;&amp;</span> <span class="nb">cd</span> ..
-<span class="c1"># 4. 部署</span>
-hugo -t tranquilpeak
-./deploy.sh <span class="s2">&#34;Your optional commit message&#34;</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>deploy.sh脚本如下</p>
+<h3 id="构造器参数组合比较多时使用builder模式">构造器参数组合比较多时使用Builder模式</h3>
+<p>构造器和静态工厂方法都不能很好地应对大量可选参数。这种情况很多时候会提供一个最完整参数的构造器，然后缺失的构造器提供部分默认值来调用此完整的构造器，这很容易出错；也可以使用Java Bean模式，调用一个无参的构造器，然后使用set方法一个个赋值，由于构造涉及多个调用，可能会造成构造过程中处于不一致状态，一个相关的缺点就是，JavaBeans模式排除了使类不可变的可能性，需要更多的精力来保证线程安全。</p>
+<p>Builder模式可以很好地平衡安全性和可读性。例如：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
@@ -581,154 +488,85 @@ hugo -t tranquilpeak
 </span><span class="lnt">22
 </span><span class="lnt">23
 </span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="cp">#!/usr/bin/env bash
-</span><span class="cp"></span>
-<span class="nb">echo</span> -e <span class="s2">&#34;\033[0;32mDeploying updates to GitHub...\033[0m&#34;</span>
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// Builder Pattern
+</span><span class="c1"></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">NutritionFacts</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">servingSize</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">servings</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">calories</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">fat</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">sodium</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">carbohydrate</span><span class="o">;</span>
 
-<span class="c1"># Build the project.</span>
-hugo <span class="c1"># if using a theme, replace with `hugo -t &lt;YOURTHEME&gt;`</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Builder</span> <span class="o">{</span>
+        <span class="c1">// Required parameters
+</span><span class="c1"></span>        <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">servingSize</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">servings</span><span class="o">;</span>
 
-<span class="c1"># Go To Public folder</span>
-<span class="nb">cd</span> public
-<span class="c1"># Add changes to git.</span>
-git add .
+        <span class="c1">// Optional parameters - initialized to default values
+</span><span class="c1"></span>        <span class="kd">private</span> <span class="kt">int</span> <span class="n">calories</span>      <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="kt">int</span> <span class="n">fat</span>           <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="kt">int</span> <span class="n">sodium</span>        <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="kt">int</span> <span class="n">carbohydrate</span>  <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
 
-<span class="c1"># Commit changes.</span>
-<span class="nv">msg</span><span class="o">=</span><span class="s2">&#34;rebuilding site `date`&#34;</span>
-<span class="k">if</span> <span class="o">[</span> <span class="nv">$#</span> -eq <span class="m">1</span> <span class="o">]</span>
-  <span class="k">then</span> <span class="nv">msg</span><span class="o">=</span><span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span>
-<span class="k">fi</span>
-git commit -m <span class="s2">&#34;</span><span class="nv">$msg</span><span class="s2">&#34;</span>
+        <span class="kd">public</span> <span class="nf">Builder</span><span class="o">(</span><span class="kt">int</span> <span class="n">servingSize</span><span class="o">,</span> <span class="kt">int</span> <span class="n">servings</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">servingSize</span> <span class="o">=</span> <span class="n">servingSize</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">servings</span>    <span class="o">=</span> <span class="n">servings</span><span class="o">;</span>
+        <span class="o">}</span>
 
-<span class="c1"># Push source and build repos.</span>
-git push origin master
+        <span class="kd">public</span> <span class="n">Builder</span> <span class="nf">calories</span><span class="o">(</span><span class="kt">int</span> <span class="n">val</span><span class="o">)</span>
+            <span class="o">{</span> <span class="n">calories</span> <span class="o">=</span> <span class="n">val</span><span class="o">;</span>      <span class="k">return</span> <span class="k">this</span><span class="o">;</span> <span class="o">}</span>
+        <span class="kd">public</span> <span class="n">Builder</span> <span class="nf">fat</span><span class="o">(</span><span class="kt">int</span> <span class="n">val</span><span class="o">)</span>
+            <span class="o">{</span> <span class="n">fat</span> <span class="o">=</span> <span class="n">val</span><span class="o">;</span>           <span class="k">return</span> <span class="k">this</span><span class="o">;</span> <span class="o">}</span>
+        <span class="kd">public</span> <span class="n">Builder</span> <span class="nf">sodium</span><span class="o">(</span><span class="kt">int</span> <span class="n">val</span><span class="o">)</span>
+            <span class="o">{</span> <span class="n">sodium</span> <span class="o">=</span> <span class="n">val</span><span class="o">;</span>        <span class="k">return</span> <span class="k">this</span><span class="o">;</span> <span class="o">}</span>
+        <span class="kd">public</span> <span class="n">Builder</span> <span class="nf">carbohydrate</span><span class="o">(</span><span class="kt">int</span> <span class="n">val</span><span class="o">)</span>
+            <span class="o">{</span> <span class="n">carbohydrate</span> <span class="o">=</span> <span class="n">val</span><span class="o">;</span>  <span class="k">return</span> <span class="k">this</span><span class="o">;</span> <span class="o">}</span>
 
-<span class="c1"># Come Back up to the Project Root</span>
-<span class="nb">cd</span> ..
+        <span class="kd">public</span> <span class="n">NutritionFacts</span> <span class="nf">build</span><span class="o">()</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="n">NutritionFacts</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="nf">NutritionFacts</span><span class="o">(</span><span class="n">Builder</span> <span class="n">builder</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">servingSize</span>  <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">servingSize</span><span class="o">;</span>
+        <span class="n">servings</span>     <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">servings</span><span class="o">;</span>
+        <span class="n">calories</span>     <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">calories</span><span class="o">;</span>
+        <span class="n">fat</span>          <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">fat</span><span class="o">;</span>
+        <span class="n">sodium</span>       <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">sodium</span><span class="o">;</span>
+        <span class="n">carbohydrate</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="na">carbohydrate</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h4 id="添加staticman">添加Staticman</h4>
-<ol>
-<li>为仓库添加Staticman</li>
-</ol>
-<p>在项目设置页Collaborators中添加staticmanapp，此时打开邀请链接https://api.staticman.net/v2/connect/{your GitHub username}/{your repository name}</p>
-<ol start="2">
-<li>创建配置文件</li>
-</ol>
-<h3 id="基本用法">基本用法</h3>
-<p>Hugo的CLI功能齐全，但使用简单，即使是那些在命令行工作经验非常有限的人也是如此。</p>
-<p>以下是您在开发Hugo项目时将使用的最常用命令的说明。 有关Hugo CLI的全面叙述，请参阅<a href="https://gohugo.io/commands/">命令行参考</a>。</p>
-<h4 id="测试安装">测试安装</h4>
-<p>安装Hugo成功后使用如下命令测试</p>
-<pre><code>hugo help
-</code></pre>
-<h4 id="hugo命令">hugo命令</h4>
-<p>hugo命令最常见的用法是在当前目录运行，这将默认在<code>public/</code>目录生成你的网站，但是可以在<a href="#%E9%85%8D%E7%BD%AE">站点配置</a>中修改<code>publishDir</code>字段来自定义输出目录。</p>
-<h4 id="草稿将来和过期内容">草稿，将来和过期内容</h4>
-<p>Hugo允许您在内容的<a href="#%E5%89%8D%E8%A8%80">前言</a>设置<code>draft</code>, <code>publishdate</code>，甚至是<code>expirydate</code>。 默认情况下，Hugo不会发布：</p>
-<ol>
-<li>具有未来<code>publishdate</code>值的内容</li>
-<li><code>draft: true</code>状态的内容</li>
-<li>具有过去<code>expirydate</code>值的内容</li>
-</ol>
-<p>通过在hugo和hugo server中分别添加以下标志，或者在<a href="#%E9%85%8D%E7%BD%AE">配置</a>中更改分配给同名字段（不带&ndash;）的布尔值，可以在本地开发和部署期间覆盖全部这三个：</p>
-<ol>
-<li>&ndash;buildFuture</li>
-<li>&ndash;buildDrafts</li>
-<li>&ndash;buildExpired</li>
-</ol>
-<h4 id="实时重载">实时重载</h4>
-<p>Hugo内置<a href="https://github.com/livereload/livereload-js">LiveReload</a>,不需要额外安装包。在开发站点时使用Hugo最常用的方法是运行命令<code>hugo server</code>，并观察变化。</p>
-<p>这将运行功能完备的Web服务器，同时在<a href="#%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84">项目组织</a>的以下区域内监控文件系统的添加，删除或更改：</p>
-<ul>
-<li>/static/*</li>
-<li>/content/*</li>
-<li>/data/*</li>
-<li>/i18n/*</li>
-<li>/layouts/*</li>
-<li>/themes/<!-- raw HTML omitted -->/*</li>
-<li>config</li>
-</ul>
-<p>每当您进行更改时，Hugo将同时重建网站并继续提供内容。一旦构建完成，LiveReload就会告诉浏览器静默重新加载页面。</p>
-<p>大多数Hugo构建都非常快，除非直接在浏览器中查看站点，否则您可能不会注意到更改。这意味着在第二台显示器（或当前显示器的另一半）上保持站点打开，可以让您查看最新版本的网站，而无需离开文本编辑器。</p>
-<blockquote>
-<p>Hugo在模板中关闭<code>&lt;/body&gt;</code>之前注入了LiveReload<code>&lt;script&gt;</code>，因此如果此标记不存在则不起作用。</p>
-</blockquote>
-<h5 id="禁用livereload">禁用LiveReload</h5>
-<p>LiveReload通过将JavaScript注入Hugo生成的页面来工作。该脚本创建从浏览器的Web socket客户端到Hugo Web socket服务器的连接。</p>
-<p>LiveReload非常适合开发。但是，一些Hugo用户可能会在生产中使用hugo server来即时显示更新的内容。以下方法可以轻松禁用LiveReload：</p>
-<pre><code>hugo server --watch=false
-</code></pre>
-<p>或</p>
-<pre><code>hugo server --disableLiveReload
-</code></pre>
-<p>通过将以下键值分别添加到config.toml或config.yml文件中，可以省略后一个标志：</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-toml" data-lang="toml"><span class="nx">disableLiveReload</span> <span class="p">=</span> <span class="kc">true</span>
-</code></pre></td></tr></table>
-</div>
-</div><div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-yml" data-lang="yml"><span class="k">disableLiveReload</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-</span></code></pre></td></tr></table>
-</div>
-</div><h4 id="部署您的网站">部署您的网站</h4>
-<p>在运行<code>hugo server</code>进行本地Web开发之后，您需要运行没有<code>server</code>部分的<code>hugo</code>命令来重建您的站点。然后，您可以通过将<code>public/</code>目录复制到生产Web服务器来部署站点。</p>
-<p>由于Hugo生成静态网站，您的网站可以使用任何Web服务器托管在任何地方。有关由Hugo社区提供的托管和自动化部署的方法，请参阅<a href="#%E4%B8%BB%E6%9C%BA%E5%92%8C%E9%83%A8%E7%BD%B2">主机和部署</a>。</p>
-<blockquote>
-<p>运行<code>hugo</code>不会在构建之前删除生成的文件。这意味着您应该在运行hugo命令之前删除您的<code>public/</code>目录（或通过标志或配置文件指定的发布目录）。如果您不删除这些文件，则存在错误文件（例如，草稿或将来的帖子）留在生成的网站中的风险。</p>
-</blockquote>
-<h5 id="dev-vs-deploy-destinations">Dev vs Deploy Destinations</h5>
-<p>Hugo在构建之前不会删除生成的文件。一个简单的解决方法是使用不同的目录进行开发和生产。</p>
-<p>要启动构建草稿内容的服务器（有助于编辑），您可以指定不同的目标;例如，<code>dev/</code>目录：</p>
-<pre><code>hugo server -wDs ~/Code/hugo/docs -d dev
-</code></pre>
-<p>当内容准备好发布时，使用默认的<code>public/</code>目录：</p>
-<pre><code>hugo -s ~/Code/hugo/docs
-</code></pre>
-<p>这可以防止草稿内容意外变为可用。</p>
-<h3 id="目录结构">目录结构</h3>
-<h4 id="新建站点scaffolding">新建站点Scaffolding</h4>
-<p>从命令行运行<code>hugo new site</code>生成器将创建一个包含以下元素的目录结构：</p>
-<pre><code>.
-├── archetypes
-├── assets
-├── config
-├── content
-├── data
-├── layouts
-├── static
-└── themes
-</code></pre>
-<h4 id="目录结构解释">目录结构解释</h4>
-<p>以下是每个目录的高级概述，其中包含指向Hugo文档中各个部分的链接。</p>
-<h5 id="archetypes">archetypes</h5>
-<p>您可以使用hugo new命令在Hugo中创建新的内容文件。默认情况下，Hugo将创建至少包含<code>date</code>，<code>title</code>（从文件名推断）和<code>draft = true</code>的新内容文件。这节省了时间并提高了使用多种内容类型的网站的一致性。您也可以使用自定义预配置的前端字段字段创建自己的archetypes。</p>
-<h5 id="assets">assets</h5>
-<p>存储Hugo Pipes需要处理的所有文件。只有使用<code>.Permalink</code>或<code>.RelPermalink</code>的文件才会发布到<code>public</code>目录。</p>
-<h5 id="config">config</h5>
-<p>Hugo附带了大量<a href="https://gohugo.io/getting-started/configuration/#all-variables-yaml">配置指令</a>。 config目录是将这些指令存储为JSON，YAML或TOML文件的位置。每个根设置对象都可以作为自己的文件并由环境构建。设置最少且不需要环境感知的项目可以在其根目录下使用单个config.toml文件。
-许多站点可能几乎不需要任何配置，但Hugo附带了大量配置指令，可以更详细地说明您希望Hugo如何构建您的网站。</p>
-<h5 id="content">content</h5>
-<p>您网站的所有内容都将位于此目录中。 Hugo中的每个顶级文件夹都被视为内容部分。例如，如果您的网站有三个主要部分 - 博客，文章和教程 - 您将在内容/博客，内容/文章和内容/教程中有三个目录。 Hugo使用部分来分配默认内容类型。</p>
-<h5 id="data">data</h5>
-<p>此目录用于存储Hugo在生成您的网站时可以使用的配置文件。您可以使用YAML，JSON或TOML格式编写这些文件。除了添加到此文件夹的文件之外，您还可以创建从动态内容中提取的数据模板。</p>
-<h5 id="layouts">layouts</h5>
-<p>以.html文件的形式存储模板，指定如何将内容的视图呈现到静态网站中。模板包括列表页面，主页，分类模板，部分，单页模板等。</p>
-<h5 id="static">static</h5>
-<p>存储所有静态内容：图像，CSS，JavaScript等。当Hugo构建您的站点时，静态目录中的所有资源都将按原样复制。使用静态文件夹的一个很好的示例是在Google Search Console上验证网站所有权，您希望Hugo在其中复制整个HTML文件而不修改其内容。</p>
-<blockquote>
-<p>从Hugo 0.31开始，您可以拥有多个静态目录。</p>
-</blockquote>
+</div><p>Builder模式可读性更好，也适合继承。</p>
+<h2 id="共有方法">共有方法</h2>
+<h2 id="heading"></h2>
 
     </div>
 
@@ -742,14 +580,7 @@ git push origin master
   <p class="copyright-item">
     <span class="item-title">LastMod</span>
     <span class="item-content">
-      2020-06-19
-      
-        <a href="https://github.com/yanweixin/yanweixin.github.io/commit/d83fe466189ba04cc061715d11f45ad78c926a0e" title="First commit">
-          (d83fe46)
-        </a>
-        
-          <br>First commit
-        
+      2020-06-20
       
     </span>
   </p>
@@ -770,20 +601,20 @@ git push origin master
       
       <nav class="post-nav">
         
-          <a class="prev" href="/post/oracle-admin/">
+        
+          <a class="next" href="/post/podman-tutorial/">
+            <span class="next-text nav-default">Podman教程</span>
+            <span class="prev-text nav-mobile">Next</span>
             
             <i class="iconfont">
-              <svg  class="icon" viewBox="0 0 1024 1024" version="1.1"
+              <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
   xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
   width="18" height="18">
-  <path d="M691.908486 949.511495l75.369571-89.491197c10.963703-12.998035 10.285251-32.864502-1.499144-44.378743L479.499795 515.267417 757.434875 204.940602c11.338233-12.190647 11.035334-32.285311-0.638543-44.850487l-80.46666-86.564541c-11.680017-12.583596-30.356378-12.893658-41.662889-0.716314L257.233596 494.235404c-11.332093 12.183484-11.041474 32.266891 0.657986 44.844348l80.46666 86.564541c1.772366 1.910513 3.706415 3.533476 5.750981 4.877077l306.620399 321.703933C662.505829 963.726242 680.945807 962.528973 691.908486 949.511495z"></path>
+  <path d="M332.091514 74.487481l-75.369571 89.491197c-10.963703 12.998035-10.285251 32.864502 1.499144 44.378743l286.278095 300.375162L266.565125 819.058374c-11.338233 12.190647-11.035334 32.285311 0.638543 44.850487l80.46666 86.564541c11.680017 12.583596 30.356378 12.893658 41.662889 0.716314l377.434212-421.426145c11.332093-12.183484 11.041474-32.266891-0.657986-44.844348l-80.46666-86.564541c-1.772366-1.910513-3.706415-3.533476-5.750981-4.877077L373.270379 71.774697C361.493148 60.273758 343.054193 61.470003 332.091514 74.487481z"></path>
 </svg>
 
             </i>
-            <span class="prev-text nav-default">Oracle数据库管理</span>
-            <span class="prev-text nav-mobile">Prev</span>
           </a>
-        
       </nav>
     </footer>
   </article>
@@ -809,10 +640,10 @@ git push origin master
         <script src="/lib/gitment/gitment-0.0.3.min.js"></script>
       <script type="text/javascript">
       const gitment = new Gitment({
-        id: 'hugo-tutorial.md',
-        title: 'Hugo教程',
+        id: 'effective-java.md',
+        title: 'Effective Java',
         link: decodeURI(location.href),
-        desc: '开始 快速开始 安装Hugo 在Hugo项目release页面下载对应平台的Hugo二进制程序，并添加对应环境变量。 通过如下命令确认安装正确 hugo version 创',
+        desc: '高性能Java 一天一个Effective Java小技巧 创建与销毁对象 用静态工厂方法取代构造器 例子： 1 2 3 public static Boolean valueOf(boolean b) { return b ? Boolean.TRUE : Boolean.FALSE; } 使用静态工',
         owner: 'yanweixin',
         repo: '',
         oauth: {

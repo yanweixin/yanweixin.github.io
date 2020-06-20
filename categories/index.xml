@@ -6,10 +6,19 @@
     <description>Recent content in Categories on A Programmer&#39;s Home</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 20 Nov 2019 08:52:44 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 20 Jun 2020 14:49:21 +0800</lastBuildDate>
     
 	<atom:link href="http://yanweixin.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>java</title>
+      <link>http://yanweixin.github.io/categories/java/</link>
+      <pubDate>Sat, 20 Jun 2020 14:49:21 +0800</pubDate>
+      
+      <guid>http://yanweixin.github.io/categories/java/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>server</title>
