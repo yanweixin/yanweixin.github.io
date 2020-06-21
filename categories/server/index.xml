@@ -21,6 +21,15 @@
     </item>
     
     <item>
+      <title>Nginx使用</title>
+      <link>https://yanweixin.github.io/post/nginx-usage/</link>
+      <pubDate>Tue, 21 Jan 2020 14:56:29 +0800</pubDate>
+      
+      <guid>https://yanweixin.github.io/post/nginx-usage/</guid>
+      <description>Nginx 起步 安装 容器 1 2 # TAG: 1.17.6, mainline, 1, 1.17, latest podman pull nginx 托管一些简单的静态内容 1 podman run --name some-nginx -v /some/content:/usr/share/nginx/html:ro -d nginx 暴露外部端口 1 podman run --name some-nginx -d -p 8080:80 some-content-nginx 这样可以在浏览器中访问http:</description>
+    </item>
+    
+    <item>
       <title>SSH使用</title>
       <link>https://yanweixin.github.io/post/ssh-usage/</link>
       <pubDate>Wed, 20 Nov 2019 08:52:44 +0800</pubDate>
