@@ -1,0 +1,1637 @@
+<!DOCTYPE html>
+<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Systemd Usage - A Programmer&#39;s Home</title>
+  
+
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta name="MobileOptimized" content="width"/>
+<meta name="HandheldFriendly" content="true"/>
+
+
+<meta name="applicable-device" content="pc,mobile">
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="author" content="Weixin" />
+  <meta name="description" content="Systemd Systemd基础 Unit管理 systemd管理和作用的基本对象是一个&amp;quot;Unit&amp;rdquo;，其中最常见的就是“service" />
+
+  <meta name="keywords" content="Code, Share, OpenSource" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.72.0" />
+
+
+<link rel="canonical" href="https://yanweixin.github.io/post/systemd-usage/" />
+
+
+
+
+
+<link rel="icon" href="/favicon.ico" />
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/sass/jane.min.fa3d941d1d0e0ddc985804227feabffea55c89883eb0af34e0532a7ae9135151.css" integrity="sha256-&#43;j2UHR0ODdyYWAQif&#43;q//qVciYg&#43;sK804FMqeukTUVE=" media="screen" crossorigin="anonymous">
+
+
+
+
+
+<meta property="og:title" content="Systemd Usage" />
+<meta property="og:description" content="Systemd Systemd基础 Unit管理 systemd管理和作用的基本对象是一个&quot;Unit&rdquo;，其中最常见的就是“service" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://yanweixin.github.io/post/systemd-usage/" />
+<meta property="article:published_time" content="2019-12-24T14:05:10+08:00" />
+<meta property="article:modified_time" content="2019-12-24T14:05:10+08:00" />
+<meta itemprop="name" content="Systemd Usage">
+<meta itemprop="description" content="Systemd Systemd基础 Unit管理 systemd管理和作用的基本对象是一个&quot;Unit&rdquo;，其中最常见的就是“service">
+<meta itemprop="datePublished" content="2019-12-24T14:05:10&#43;08:00" />
+<meta itemprop="dateModified" content="2019-12-24T14:05:10&#43;08:00" />
+<meta itemprop="wordCount" content="5095">
+
+
+
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Systemd Usage"/>
+<meta name="twitter:description" content="Systemd Systemd基础 Unit管理 systemd管理和作用的基本对象是一个&quot;Unit&rdquo;，其中最常见的就是“service"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-140868062-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Coder</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://yanweixin.github.io/">Home</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://yanweixin.github.io/post/">Archives</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://yanweixin.github.io/tags/">Tags</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://yanweixin.github.io/categories/">Categories</a>
+          
+        
+      </li><li class="mobile-menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://gohugo.io" rel="noopener" target="_blank">
+              external-link
+              
+              <i class="iconfont">
+                <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="18" height="18">
+  <path d="M623.36 272.96 473.216 423.04C467.2 429.056 467.072 438.656 472.896 444.416c0 0-6.72-6.656 1.6 1.6C496.064 467.648 528.64 500.224 528.64 500.224 534.464 506.048 544 505.856 550.016 499.904l150.08-150.144 67.328 66.432c9.024 8.96 27.456 4.544 30.4-8.96 19.968-92.608 46.656-227.52 46.656-227.52 6.848-34.496-16.192-56.704-49.92-49.92 0 0-134.656 26.816-227.328 46.784C560.32 178.048 556.352 182.272 554.752 187.136c-3.2 6.208-3.008 14.208 3.776 20.992L623.36 272.96z"></path>
+  <path d="M841.152 457.152c-30.528 0-54.784 24.512-54.784 54.656l0 274.752L237.696 786.56 237.696 237.696l206.016 0c6.656 0 10.752 0 13.248 0C487.68 237.696 512 213.184 512 182.848 512 152.32 487.36 128 456.96 128L183.04 128C153.216 128 128 152.576 128 182.848c0 3.136 0.256 6.272 0.768 9.28C128.256 195.136 128 198.272 128 201.408l0 639.488c0 0.064 0 0.192 0 0.256 0 0.128 0 0.192 0 0.32 0 30.528 24.512 54.784 54.784 54.784l646.976 0c6.592 0 9.728 0 11.712 0 28.736 0 52.928-22.976 54.464-51.968C896 843.264 896 842.304 896 841.344l0-20.352L896 561.408 896 512.128C896 481.792 871.424 457.152 841.152 457.152z"></path>
+</svg>
+
+              </i>
+            </a>
+          
+        
+      </li>
+    
+
+    
+      <li class="mobile-menu-item">
+        <a id="openSearchMobile" class="mobile-menu-item-link menu-item-search" href="#">
+          <i class="iconfont">
+            <svg version="1.1" viewBox="0 0 1024 1024"
+  xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M973.81454219 973.81454219a91.78207815 91.78207815 0 0 1-129.80999631 0l-161.97482118-161.97482118a425.48527711 425.48527711 0 0 1-230.35931791 68.16531768 428.3346319 428.3346319 0 1 1 428.3346319-428.3346319 425.48527711 425.48527711 0 0 1-68.16531768 230.35931791l162.02961656 161.97482118a91.83687354 91.83687354 0 0 1-0.05479538 129.80999631zM451.67040679 145.69361559a305.97679241 305.97679241 0 1 0 0 611.95358361 305.97679241 305.97679241 0 0 0 0-611.95358361z">
+  </path>
+</svg>
+
+          </i>
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+
+  
+    
+
+
+
+
+
+
+  <link rel="stylesheet" href="/lib/photoswipe/photoswipe.min.css" />
+  <link rel="stylesheet" href="/lib/photoswipe/default-skin/default-skin.min.css" />
+
+
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+  
+
+  
+    
+<div class="modal-dialog">
+    
+    <div class="modal-content">
+      <div id="closeSearch" title="Close" class="close">X</div>
+      <div class="modal-header">
+        <div class="modal-title">Search</div>
+      </div>
+      <div class="modal-body">
+          <script>
+            (function() {
+              var cx = '016772707527870234150:3olmavgy4bm';
+              var gcse = document.createElement('script');
+              gcse.type = 'text/javascript';
+              gcse.async = true;
+              gcse.src = (document.location.protocol == 'https:' ? 'https:' :
+                  'http:') +
+                '//cse.google.com/cse.js?cx=' + cx;
+              var s = document.getElementsByTagName('script')[0];
+              s.parentNode.insertBefore(gcse, s);
+            })();
+          </script>
+          <gcse:search></gcse:search>
+      </div>
+    </div>
+</div>
+
+  
+
+  
+
+  <header id="header" class="header container">
+    <div class="logo-wrapper">
+  <a href="/" class="logo">
+    
+      Coder
+    
+  </a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://yanweixin.github.io/">Home</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://yanweixin.github.io/post/">Archives</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://yanweixin.github.io/tags/">Tags</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://yanweixin.github.io/categories/">Categories</a>
+          
+
+        
+
+      </li>
+    
+        <li class="menu-item">
+        
+          
+          
+            <a class="menu-item-link" href="https://gohugo.io" rel="noopener" target="_blank">
+              external-link
+              
+              <i class="iconfont">
+                <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="18" height="18">
+  <path d="M623.36 272.96 473.216 423.04C467.2 429.056 467.072 438.656 472.896 444.416c0 0-6.72-6.656 1.6 1.6C496.064 467.648 528.64 500.224 528.64 500.224 534.464 506.048 544 505.856 550.016 499.904l150.08-150.144 67.328 66.432c9.024 8.96 27.456 4.544 30.4-8.96 19.968-92.608 46.656-227.52 46.656-227.52 6.848-34.496-16.192-56.704-49.92-49.92 0 0-134.656 26.816-227.328 46.784C560.32 178.048 556.352 182.272 554.752 187.136c-3.2 6.208-3.008 14.208 3.776 20.992L623.36 272.96z"></path>
+  <path d="M841.152 457.152c-30.528 0-54.784 24.512-54.784 54.656l0 274.752L237.696 786.56 237.696 237.696l206.016 0c6.656 0 10.752 0 13.248 0C487.68 237.696 512 213.184 512 182.848 512 152.32 487.36 128 456.96 128L183.04 128C153.216 128 128 152.576 128 182.848c0 3.136 0.256 6.272 0.768 9.28C128.256 195.136 128 198.272 128 201.408l0 639.488c0 0.064 0 0.192 0 0.256 0 0.128 0 0.192 0 0.32 0 30.528 24.512 54.784 54.784 54.784l646.976 0c6.592 0 9.728 0 11.712 0 28.736 0 52.928-22.976 54.464-51.968C896 843.264 896 842.304 896 841.344l0-20.352L896 561.408 896 512.128C896 481.792 871.424 457.152 841.152 457.152z"></path>
+</svg>
+
+              </i>
+            </a>
+          
+
+        
+
+      </li>
+    
+
+    
+    
+
+    
+      <li class="menu-item">
+        <a id="openSearch" class="menu-item-link menu-item-search" href="#">
+          <i class="iconfont">
+            <svg version="1.1" viewBox="0 0 1024 1024"
+  xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
+  <path d="M973.81454219 973.81454219a91.78207815 91.78207815 0 0 1-129.80999631 0l-161.97482118-161.97482118a425.48527711 425.48527711 0 0 1-230.35931791 68.16531768 428.3346319 428.3346319 0 1 1 428.3346319-428.3346319 425.48527711 425.48527711 0 0 1-68.16531768 230.35931791l162.02961656 161.97482118a91.83687354 91.83687354 0 0 1-0.05479538 129.80999631zM451.67040679 145.69361559a305.97679241 305.97679241 0 1 0 0 611.95358361 305.97679241 305.97679241 0 0 0 0-611.95358361z">
+  </path>
+</svg>
+
+          </i>
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+  </header>
+
+  <div id="mobile-panel">
+    <main id="main" class="main bg-llight">
+      <div class="content-wrapper">
+        <div id="content" class="content container">
+          <article class="post bg-white">
+    
+    <header class="post-header">
+      <h1 class="post-title">Systemd Usage</h1>
+      
+      <div class="post-meta">
+        <time datetime="2019-12-24" class="post-time">
+          2019-12-24
+        </time>
+        <div class="post-category">
+            <a href="https://yanweixin.github.io/categories/linux/"> linux </a>
+            
+          </div>
+        <span class="more-meta"> 5095 words </span>
+          <span class="more-meta"> 11 min read </span>
+
+        
+        
+
+        
+        
+      </div>
+    </header>
+
+    
+    
+<div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Table of Contents</h2>
+  <div class="post-toc-content">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#systemd基础">Systemd基础</a>
+      <ul>
+        <li><a href="#unit管理">Unit管理</a></li>
+        <li><a href="#启用与禁用unit">启用与禁用Unit</a></li>
+        <li><a href="#系统状态概览">系统状态概览</a></li>
+        <li><a href="#查看日志信息">查看日志信息</a></li>
+        <li><a href="#查询unit状态和日志">查询Unit状态和日志</a></li>
+        <li><a href="#检查unit和unit文件">检查unit和unit文件</a></li>
+        <li><a href="#修改unit文件">修改Unit文件</a></li>
+        <li><a href="#target运行级别">Target（运行级别）</a></li>
+        <li><a href="#停止与重启服务器">停止与重启服务器</a></li>
+      </ul>
+    </li>
+    <li><a href="#使用systemctl管理systemd服务和unit">使用Systemctl管理Systemd服务和Unit</a>
+      <ul>
+        <li><a href="#管理服务">管理服务</a></li>
+        <li><a href="#系统状态概览-1">系统状态概览</a></li>
+        <li><a href="#unit管理-1">Unit管理</a></li>
+        <li><a href="#编辑unit文件">编辑unit文件</a></li>
+        <li><a href="#使用target调整系统状态运行级别">使用Target调整系统状态（运行级别）</a></li>
+      </ul>
+    </li>
+    <li><a href="#使用journalctl管理和查看systemd日志">使用Journalctl管理和查看systemd日志</a>
+      <ul>
+        <li><a href="#日志查看">日志查看</a></li>
+        <li><a href="#时间过滤">时间过滤</a></li>
+        <li><a href="#时间窗口">时间窗口</a></li>
+        <li><a href="#过滤信息">过滤信息</a></li>
+        <li><a href="#修改显示">修改显示</a></li>
+        <li><a href="#活动进程监控">活动进程监控</a></li>
+        <li><a href="#journal维护">Journal维护</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+
+    
+    <div class="post-content">
+      <h1 id="systemd">Systemd</h1>
+<h2 id="systemd基础">Systemd基础</h2>
+<h3 id="unit管理">Unit管理</h3>
+<p>systemd管理和作用的基本对象是一个&quot;Unit&rdquo;，其中最常见的就是“service”（.service结尾的unit文件）。主要的管理工具就是systemctl，下面以nginx.service 为例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo systemctl start nginx.service <span class="c1">#启动服务</span>
+sudo systemctl stop nginx.service <span class="c1">#停止服务</span>
+sudo systemctl restart nginx.service <span class="c1">#重启服务</span>
+sudo systemctl reload nginx.service <span class="c1">#不打断服务的情况下重新加载配置文件</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="启用与禁用unit">启用与禁用Unit</h3>
+<p>默认情况下，大多数systemd单元文件不会在启动时自动启动。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo systemctl <span class="nb">enable</span> nginx.service  <span class="c1">#开机启动服务</span>
+sudo systemctl disable nginx.service  <span class="c1">#取消开机启动</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="系统状态概览">系统状态概览</h3>
+<p>获取systemd列为“active”的unit文件</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">systemctl list-units
+</code></pre></td></tr></table>
+</div>
+</div><p>使用&ndash;all列出全部systemd试图加载或已经加载到内存中到unit文件</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">systemctl list-units --all
+</code></pre></td></tr></table>
+</div>
+</div><p>列出全部系统已安装到unit，包括那些systemd没去加载的</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">systemctl list-unit-files
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="查看日志信息">查看日志信息</h3>
+<p>查看全部日志，从最早的开始：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">journalctl
+</code></pre></td></tr></table>
+</div>
+</div><p>如果journald配置了保存先前的启动记录也会一并显示，有些发行版默认禁用此功能，可以编辑<code>/etc/systemd/journald.conf</code>文件，设置<code>Storage=</code>选项为&quot;persistent&rdquo;，也可以创建保存目录<code>sudo mkdir -p /var/log/journal</code></p>
+<p>如果只想看本次启动相关的内容，可以加上-b选项：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">journalctl -b
+</code></pre></td></tr></table>
+</div>
+</div><p>只看kernel信息，加上-k选项：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">journalctl -k
+</code></pre></td></tr></table>
+</div>
+</div><p>也可以组合起来，只看本次的kernel信息：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">journalctl -k -b
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="查询unit状态和日志">查询Unit状态和日志</h3>
+<p>查看一个unit当前状态概览，包括是否活跃、进程信息和最新的日记账：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">systemctl status nginx.service
+</code></pre></td></tr></table>
+</div>
+</div><p>只看相关unit的日记账，使用-u选项指定其名称：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">journalctl -u nginx.service
+</code></pre></td></tr></table>
+</div>
+</div><p>同样可以限制本次启动：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">journalctl -b -u nginx.service
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="检查unit和unit文件">检查unit和unit文件</h3>
+<p>unit文件中包含了systemd用于管理和运行unit的参数，查看unit文件完整内容：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">systemctl cat nginx.service
+</code></pre></td></tr></table>
+</div>
+</div><p>查看unit依赖树，会递归展开依赖的unit：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">systemctl list-dependencies nginx.service
+</code></pre></td></tr></table>
+</div>
+</div><p>展开全部依赖的unit：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">systemctl list-dependencies --all nginx.service
+</code></pre></td></tr></table>
+</div>
+</div><p>查看systemd管理每个参数的值：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">systemctl show nginx.service
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="修改unit文件">修改Unit文件</h3>
+<p>添加一个unit片段文件，以增加或覆盖默认设置：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo systemctl edit nginx.service
+</code></pre></td></tr></table>
+</div>
+</div><p>修改unit文件的全部内容，而非片段：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo systemctl edit --full nginx.service
+</code></pre></td></tr></table>
+</div>
+</div><p>修改完成后，需承载systemd进程以生效：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo systemctl daemon-reload
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="target运行级别">Target（运行级别）</h3>
+<p>查看系统可用target：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">systemctl list-unit-files --type<span class="o">=</span>target
+</code></pre></td></tr></table>
+</div>
+</div><p>查看systemd启动时默认target：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">systemctl get-default
+</code></pre></td></tr></table>
+</div>
+</div><p>更改默认target：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo systemctl set-default multi-user.target
+</code></pre></td></tr></table>
+</div>
+</div><p>查看target绑定的unit：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">systemctl list-dependencies multi-user.target
+</code></pre></td></tr></table>
+</div>
+</div><p>使用isolate切换系统target，并停止所有非指定target绑定的unit，请确保关键服务不会被停止：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo systemctl isolate multi-user.target
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="停止与重启服务器">停止与重启服务器</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 关闭系统</span>
+sudo systemctl halt
+<span class="c1"># 关机</span>
+sudo systemctl poweroff
+<span class="c1"># 重启</span>
+sudo systemctl reboot
+<span class="c1"># 启动进入救援（单用户）模式</span>
+sudo systemctl rescue
+</code></pre></td></tr></table>
+</div>
+</div><p>大多数系统都有别名供使用，而无需输入systemctl，如<code>sudo poweroff</code>和<code>sudo reboot</code> 。</p>
+<h2 id="使用systemctl管理systemd服务和unit">使用Systemctl管理Systemd服务和Unit</h2>
+<h3 id="管理服务">管理服务</h3>
+<p>systemd管理对象就是unit，unit的类型可以根据unit文件后缀推断，服务类型的unit以.service结尾。对于大多数服务管理命令，可以省略.service后缀。</p>
+<p>启动与停止服务：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo systemctl start application.service
+</code></pre></td></tr></table>
+</div>
+</div><p>对于服务管理命令，systemd会自动寻找.service结尾的文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo systemctl start application
+</code></pre></td></tr></table>
+</div>
+</div><p>停止服务：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo systemctl stop application.service
+</code></pre></td></tr></table>
+</div>
+</div><p>重启服务：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo systemctl restart application.service
+</code></pre></td></tr></table>
+</div>
+</div><p>重载服务配置文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo systemctl reload application.service
+</code></pre></td></tr></table>
+</div>
+</div><p>如果不确定服务是否具有重载配置文件的功能，可以使用reload-or-restart，如果无法重载配置文件，就会重启服务以使配置生效：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo systemctl reload-or-restart application.service
+</code></pre></td></tr></table>
+</div>
+</div><p>开机启动服务：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo systemctl <span class="nb">enable</span> application.service
+</code></pre></td></tr></table>
+</div>
+</div><p>这会创建一个从系统服务文件（通常在<code>/lib/systemd/system</code>或<code>/etc/systemd/system</code>）到systemd查找自启动文件（通常为<code>/etc/systemd/system/some_target.target.wants</code>）的符号链接。</p>
+<p>取消服务自启动（会删除符号链接）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo systemctl disable application.service
+</code></pre></td></tr></table>
+</div>
+</div><p>查看服务状态：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">systemctl status application.service
+</code></pre></td></tr></table>
+</div>
+</div><p>也可以检查特定的状态，例如查看服务是否正在运行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">systemctl is-active application.service
+</code></pre></td></tr></table>
+</div>
+</div><p>会返回服务的当前状态，通常是active 或 inactive，如果是active，退出代码就是0，方便程序处理结果。</p>
+<p>查看服务是否自启动：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">systemctl is-enabled application.service
+</code></pre></td></tr></table>
+</div>
+</div><p>会返回enabled 或 disabled，同样根据返回结果退出代码会是0或者1。</p>
+<p>检查服务是否处于failed状态，这表明相关unit存在启动问题：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">systemctl is-failed application.service
+</code></pre></td></tr></table>
+</div>
+</div><p>如果运行正常，它将返回active状态；如果发生错误，则failed。 如果本机有意停止，则它可能返回unknown或inactive。 退出状态“0”表示发生故障，退出状态“1”表示任何其他状态。</p>
+<h3 id="系统状态概览-1">系统状态概览</h3>
+<p>查看当前活动的unit：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">systemctl list-units
+<span class="c1"># 或者</span>
+systemctl
+</code></pre></td></tr></table>
+</div>
+</div><p>使用&ndash;all查看systemd已经加载或者试图加载的unit，不论当前是否活动：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">systemctl list-units --all
+</code></pre></td></tr></table>
+</div>
+</div><p>使用&ndash;state=查看想看的LOAD, ACTIVE, 或 SUB状态（加上&ndash;all否则只能看到active）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">systemctl list-units --all --state=inactive
+</code></pre></td></tr></table>
+</div>
+</div><p>只查看感兴趣的unit类型：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">systemctl list-units --type<span class="o">=</span>service
+</code></pre></td></tr></table>
+</div>
+</div><p>列出所有unit文件（list-units只会列出systemd尝试解析和加载的文件）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">systemctl list-unit-files
+</code></pre></td></tr></table>
+</div>
+</div><p>列出的状态通常为“enabled”, “disabled”, “static”, 或“masked”，static表明unit文件不包含“install”部分，这是启用unit必需的。通常代表此unit是一次性行为或者仅仅是其他unit的依赖项，不能单独运行。</p>
+<h3 id="unit管理-1">Unit管理</h3>
+<p>显示systemd已加载到系统中的unit文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">systemctl cat atd.service
+</code></pre></td></tr></table>
+</div>
+</div><p>显示依赖：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">systemctl list-dependencies sshd.service
+</code></pre></td></tr></table>
+</div>
+</div><p>将会显示启动相关unit需按序处理的unit，包括那些required和wanted的uiit。同时只有.target的unit才会递归地显示，若是希望所有依赖递归显示，则加上<code>--all</code>。若是希望逆序显示，使用<code>--reverse</code>。还有些有用的标志，如&ndash;before 和 &ndash;after，分别显示指定依赖前和后启动的依赖项。</p>
+<p>检查unit属性，以key=value格式显示指定unit的属性：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">systemctl show sshd.service
+</code></pre></td></tr></table>
+</div>
+</div><p>如果只想显示某个属性，使用-p ：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">systemctl show sshd.service -p Conflicts
+</code></pre></td></tr></table>
+</div>
+</div><p>systemd还可以通过将unit链接到/dev/null，以将其标记为完全不可启动（不论自动或手动），通过mask命令完成：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo systemctl mask nginx.service
+</code></pre></td></tr></table>
+</div>
+</div><p>再使用<code>systemctl list-unit-files</code>检查时，就会发现状态变成了masked。使用unmask命令使其重新可用：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo systemctl unmask nginx.service
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="编辑unit文件">编辑unit文件</h3>
+<p>使用edit命令会自动打开一个该unit文件片段：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo systemctl edit nginx.service
+</code></pre></td></tr></table>
+</div>
+</div><p>这是一个空文件，用于覆盖和增加指令到unit定义中。会在<code>/etc/systemd/system</code>目录下创建一个unit名加<code>.d</code>的目录，例如nginx.service就会创建一个nginx.service.d目录。在此目录下会有一个名为override.conf的文件，在unit被加载时，systemd会在内存中合并原完整文件和此片段文件，片段文件中的指令优先于原文件。</p>
+<p>使用&ndash;full选项可以创建完整unit文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo systemctl edit --full nginx.service
+</code></pre></td></tr></table>
+</div>
+</div><p>这会把当前unit文件加载到编辑器中，在退出时保存到<code>/etc/systemd/system</code>，优先于系统unit定义（通常在<code>/lib/systemd/system</code>）</p>
+<p>若想移除更改，可以删除.d目录或/etc/systemd/system目录下完整定义文件。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo rm -r /etc/systemd/system/nginx.service.d
+sudo rm /etc/systemd/system/nginx.service
+</code></pre></td></tr></table>
+</div>
+</div><p>重载systemd进程以生效：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo systemctl daemon-reload
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="使用target调整系统状态运行级别">使用Target调整系统状态（运行级别）</h3>
+<p>target是描述系统状态或同步点点特殊unit文件，以.target结尾。target本身并不会做太多事情，而是用来将其他unit组合在一起。</p>
+<p>可以使用它来使系统进入某些状态，就像其他init系统使用运行级别一样。 它们用作参考何时某些功能可用，允许你指定所需的状态，而不是产生该状态所需的各个单元。</p>
+<p>例如，有一个swap.target用于指示交换已准备就绪。 属于此过程的单元可以通过在其配置中指出它们是<code>WantedBy=</code>或<code>RequiredBy=</code> <code>swap.target</code>来与此target同步。 需要交换的unit可以使用<code>Wants=</code>，<code>Requires=</code>和<code>After=</code>指定此条件，以指示其关系。</p>
+<p>获取和设置systemd进程在系统启动时默认的target：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">systemctl get-default
+
+sudo systemctl set-default graphical.target
+</code></pre></td></tr></table>
+</div>
+</div><p>获取可用的target：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">systemctl list-unit-files --type<span class="o">=</span>target
+</code></pre></td></tr></table>
+</div>
+</div><p>与运行级别不同，一次可以运行多个target，活动的target表示systemd已尝试启动与target关联的所有unit，并且未尝试再次将其拆除。查看所有活动的target：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">systemctl list-units --type<span class="o">=</span>target
+</code></pre></td></tr></table>
+</div>
+</div><p>使用isolate命令，可以启用所有某个target关联的unit，而停止所有非依赖树上的unit，这与init系统中的更改运行级别类似。</p>
+<p>例如从graphical.target切换到multi-user.target，前者依赖后者。在进行隔离之前先看一下是否会影响关键服务：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">systemctl list-dependencies multi-user.target
+</code></pre></td></tr></table>
+</div>
+</div><p>如果不会影响需要的unit，就可以进行隔离：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo systemctl isolate multi-user.target
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="使用journalctl管理和查看systemd日志">使用Journalctl管理和查看systemd日志</h2>
+<p>systemd日志背后的推动力之一是集中管理日志，无论消息源自何处。 由于许多引导过程和服务管理都是由systemd进程处理的，因此标准化日志的收集和访问方式是有意义的。 journald的守护程序从所有可用的源中收集数据，并将其以二进制格式存储，以便于动态地进行操作。</p>
+<p>systemd默认使用本地时间显示日志，可以使用其自带工具timedatectl修改设置。查看可用时区：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">timedatectl list-timezones
+</code></pre></td></tr></table>
+</div>
+</div><p>设置时区：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo timedatectl set-timezone zone
+</code></pre></td></tr></table>
+</div>
+</div><p>查看是否使用了正确的时区：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">timedatectl status
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="日志查看">日志查看</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">journalctl
+</code></pre></td></tr></table>
+</div>
+</div><p>日志默认从最早开始显示。使用UTC时间戳显示：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">journalctl --utc
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="时间过滤">时间过滤</h3>
+<p>只显示本次启动日志：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">journalctl -b
+</code></pre></td></tr></table>
+</div>
+</div><p>若想查看过去启动的日志，journalctl也提供了非常方便的工具。如果你的发行版没有默认保存过去的日志，可以如下操作：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo mkdir -p /var/log/journal
+</code></pre></td></tr></table>
+</div>
+</div><p>或者</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">sudo nano /etc/systemd/journald.conf
+</code></pre></td></tr></table>
+</div>
+</div><p>添加如下内容：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">. . .
+[Journal]
+Storage=persistent
+</code></pre></td></tr></table>
+</div>
+</div><p>使用&ndash;list-boots选项查看可用的启动记录：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">journalctl --list-boots
+</code></pre></td></tr></table>
+</div>
+</div><p>显示的第一列是相对指针，第二列是boot ID，这两列都可以用于查看特定启动的日志：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">journalctl -b -1
+journalctl -b caf0524a1d394ce0bdbcff75b94444fe
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="时间窗口">时间窗口</h3>
+<p>可以使用&ndash;since 和&ndash;until选项限制时间范围。时间戳可以有许多格式，其中绝对时间格式为<code>YYYY-MM-DD HH:MM:SS</code>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">journalctl --since <span class="s2">&#34;2015-01-10 17:15:00&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>如果日期部分缺失，会用0补足：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">journalctl --since <span class="s2">&#34;2015-01-10&#34;</span> --until <span class="s2">&#34;2015-01-11 03:00&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>journal也可以使用一些相对值，如“yesterday”, “today”, “tomorrow”, 或“now”，对于数字量可在前面加“-” 或 “+” ，也可以在句子中使用“ago” ：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">journalctl --since yesterday
+journalctl --since 09:00 --until <span class="s2">&#34;1 hour ago&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="过滤信息">过滤信息</h3>
+<p>按Unit</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">journalctl -u nginx.service
+journalctl -u nginx.service --since today
+journalctl -u nginx.service -u php-fpm.service --since today
+</code></pre></td></tr></table>
+</div>
+</div><p>按进程/用户/用户组</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">journalctl <span class="nv">_PID</span><span class="o">=</span><span class="m">8088</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>也可以使用_UID 或 _GID按用户和用户组过滤，使用<code>id -u username</code>获取用户ID：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">journalctl <span class="nv">_UID</span><span class="o">=</span><span class="m">1000</span> --since today
+</code></pre></td></tr></table>
+</div>
+</div><p>journal还有许多可用的选项，可以使用如下命令获取：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">man systemd.journal-fields
+</code></pre></td></tr></table>
+</div>
+</div><p>例如查看journal记录了哪些用户组的日志：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">journalctl -F _GID
+</code></pre></td></tr></table>
+</div>
+</div><p>按组件路径：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">journalctl /usr/bin/bash
+</code></pre></td></tr></table>
+</div>
+</div><p>显示Kernel信息：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">journalctl -k
+journalctl -k -b -5 <span class="c1">#可以组合之前的选项</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>使用-p选项按权重显示：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">journalctl -p err -b
+</code></pre></td></tr></table>
+</div>
+</div><p>权重从高到低分别是：</p>
+<pre><code>0: emerg
+1: alert
+2: crit
+3: err
+4: warning
+5: notice
+6: info
+7: debug
+</code></pre>
+<h3 id="修改显示">修改显示</h3>
+<p>journal默认显示完整信息，可能需要使用-&gt;键查看屏幕右方的内容，可以使用&ndash;no-full信息截去这部分内容，用引号代替：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">journalctl --no-full
+</code></pre></td></tr></table>
+</div>
+</div><p>使用-a选项显示全部信息，无论是否包含不可打印的信息：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">journalctl -a
+</code></pre></td></tr></table>
+</div>
+</div><p>journal默认按页显示内容，为了方便信息使用其他标准输出，可以使用&ndash;no-pager选项：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">journalctl --no-pager
+</code></pre></td></tr></table>
+</div>
+</div><p>使用-o选项更改输出格式，如使用JSON输出：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">journalctl -b -u nginx -o json
+</code></pre></td></tr></table>
+</div>
+</div><p>可用格式如下：</p>
+<pre><code>cat: Displays only the message field itself.
+export: A binary format suitable for transferring or backing up.
+json: Standard JSON with one entry per line.
+json-pretty: JSON formatted for better human-readability
+json-sse: JSON formatted output wrapped to make add server-sent event compatible
+short: The default syslog style output
+short-iso: The default format augmented to show ISO 8601 wallclock timestamps.
+short-monotonic: The default format with monotonic timestamps.
+short-precise: The default format with microsecond precision
+verbose: Shows every journal field available for the entry, including those usually hidden internally.
+</code></pre>
+<h3 id="活动进程监控">活动进程监控</h3>
+<p>-n选项与tail -n类似，只查看最新内容，默认只显示最近10条：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">journalctl -n
+journalctl -n <span class="m">20</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>-f选项与tail -f类似，实时输出日志：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">journalctl -f
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="journal维护">Journal维护</h3>
+<p>查看磁盘使用量：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">journalctl --disk-usage
+</code></pre></td></tr></table>
+</div>
+</div><p>删除旧日志：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="c1"># 删除旧日志直到满足要求的大小</span>
+sudo journalctl --vacuum-size<span class="o">=</span>1G
+<span class="c1"># 只保留一年的日志</span>
+sudo journalctl --vacuum-time<span class="o">=</span>1years
+</code></pre></td></tr></table>
+</div>
+</div><p>通过修改<code>/etc/systemd/journald.conf</code>文件，可以现在journal使用的空间。</p>
+<table>
+<thead>
+<tr>
+<th>设置</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SystemMaxUse=</td>
+<td>最大磁盘空间使用量</td>
+</tr>
+<tr>
+<td>SystemKeepFree=</td>
+<td>需要保留的空间</td>
+</tr>
+<tr>
+<td>SystemMaxFileSize=</td>
+<td>最大单个日志文件大小</td>
+</tr>
+<tr>
+<td>RuntimeMaxUse=</td>
+<td>在<code>/run</code>中还未持久化的日志最大大小</td>
+</tr>
+<tr>
+<td>RuntimeKeepFree=</td>
+<td><code>/run</code>文件系统中需要保留给其他用户的量</td>
+</tr>
+<tr>
+<td>RuntimeMaxFileSize=</td>
+<td><code>/run</code>中最大单个日志文件大小</td>
+</tr>
+</tbody>
+</table>
+
+    </div>
+
+    
+    
+<div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Weixin</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+      2019-12-24
+      
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+
+
+    
+    
+
+    <footer class="post-footer">
+      
+
+      
+      <nav class="post-nav">
+        
+          <a class="prev" href="/post/nginx-usage/">
+            
+            <i class="iconfont">
+              <svg  class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="18" height="18">
+  <path d="M691.908486 949.511495l75.369571-89.491197c10.963703-12.998035 10.285251-32.864502-1.499144-44.378743L479.499795 515.267417 757.434875 204.940602c11.338233-12.190647 11.035334-32.285311-0.638543-44.850487l-80.46666-86.564541c-11.680017-12.583596-30.356378-12.893658-41.662889-0.716314L257.233596 494.235404c-11.332093 12.183484-11.041474 32.266891 0.657986 44.844348l80.46666 86.564541c1.772366 1.910513 3.706415 3.533476 5.750981 4.877077l306.620399 321.703933C662.505829 963.726242 680.945807 962.528973 691.908486 949.511495z"></path>
+</svg>
+
+            </i>
+            <span class="prev-text nav-default">Nginx使用</span>
+            <span class="prev-text nav-mobile">Prev</span>
+          </a>
+        
+          <a class="next" href="/post/ssh-usage/">
+            <span class="next-text nav-default">SSH使用</span>
+            <span class="prev-text nav-mobile">Next</span>
+            
+            <i class="iconfont">
+              <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="18" height="18">
+  <path d="M332.091514 74.487481l-75.369571 89.491197c-10.963703 12.998035-10.285251 32.864502 1.499144 44.378743l286.278095 300.375162L266.565125 819.058374c-11.338233 12.190647-11.035334 32.285311 0.638543 44.850487l80.46666 86.564541c11.680017 12.583596 30.356378 12.893658 41.662889 0.716314l377.434212-421.426145c11.332093-12.183484 11.041474-32.266891-0.657986-44.844348l-80.46666-86.564541c-1.772366-1.910513-3.706415-3.533476-5.750981-4.877077L373.270379 71.774697C361.493148 60.273758 343.054193 61.470003 332.091514 74.487481z"></path>
+</svg>
+
+            </i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+
+  
+  
+  
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+
+  <div class="post bg-white">
+      <div id="comments-gitment"></div>
+      <link rel="stylesheet" href="/lib/gitment/gitment-0.0.3.min.css">
+        <script src="/lib/gitment/gitment-0.0.3.min.js"></script>
+      <script type="text/javascript">
+      const gitment = new Gitment({
+        id: 'systemd-usage.md',
+        title: 'Systemd Usage',
+        link: decodeURI(location.href),
+        desc: 'Systemd Systemd基础 Unit管理 systemd管理和作用的基本对象是一个\u0026quot;Unit\u0026rdquo;，其中最常见的就是“service',
+        owner: 'yanweixin',
+        repo: 'yanweixin.github.io',
+        oauth: {
+          client_id: '4fcc40337476b3ed92f0',
+          client_secret: 'a74e95bfeeeac10673b57c6b84b8f75d7628a0d7'
+        }
+      })
+      gitment.render('comments-gitment')
+      </script>
+      <noscript>Please enable JavaScript to view the <a href="https://github.com/imsun/gitment">comments powered by gitment.</a></noscript>
+    </div>
+
+  
+
+    
+
+  
+
+        </div>
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="icon-links">
+  
+  
+    <a href="mailto:yanweixin@zoho.com" rel="me noopener" class="iconfont"
+      title="email" >
+      <svg class="icon" viewBox="0 0 1451 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="36" height="36">
+  <path d="M664.781909 681.472759 0 97.881301C0 3.997201 71.046997 0 71.046997 0L474.477909 0 961.649408 0 1361.641813 0C1361.641813 0 1432.688811 3.997201 1432.688811 97.881301L771.345323 681.472759C771.345323 681.472759 764.482731 685.154773 753.594283 688.65053L753.594283 688.664858C741.602731 693.493018 729.424896 695.068979 718.077952 694.839748 706.731093 695.068979 694.553173 693.493018 682.561621 688.664858L682.561621 688.65053C671.644501 685.140446 664.781909 681.472759 664.781909 681.472759L664.781909 681.472759ZM718.063616 811.603883C693.779541 811.016482 658.879232 802.205449 619.10784 767.734955 542.989056 701.759633 0 212.052267 0 212.052267L0 942.809523C0 942.809523 0 1024 83.726336 1024L682.532949 1024 753.579947 1024 1348.948139 1024C1432.688811 1024 1432.688811 942.809523 1432.688811 942.809523L1432.688811 212.052267C1432.688811 212.052267 893.138176 701.759633 817.019477 767.734955 777.248 802.205449 742.347691 811.03081 718.063616 811.603883L718.063616 811.603883Z"></path>
+</svg>
+
+    </a>
+
+
+<a href="https://yanweixin.github.io/index.xml" rel="noopener alternate" type="application/rss&#43;xml"
+    class="iconfont" title="rss" target="_blank">
+    <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="30" height="30">
+  <path d="M819.157333 1024C819.157333 574.592 449.408 204.8 0 204.8V0c561.706667 0 1024 462.293333 1024 1024h-204.842667zM140.416 743.04a140.8 140.8 0 0 1 140.501333 140.586667A140.928 140.928 0 0 1 140.074667 1024C62.72 1024 0 961.109333 0 883.626667s62.933333-140.544 140.416-140.586667zM678.784 1024h-199.04c0-263.210667-216.533333-479.786667-479.744-479.786667V345.173333c372.352 0 678.784 306.517333 678.784 678.826667z"></path>
+</svg>
+
+  </a>
+   
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - <a class="theme-link" href="https://github.com/xianmin/hugo-theme-jane">Jane</a>
+  </span>
+
+  <span class="copyright-year">
+    &copy;
+    
+      2019 -
+    2020
+    <span class="heart">
+      
+      <i class="iconfont">
+        <svg class="icon" viewBox="0 0 1025 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="14" height="14">
+  <path d="M1000.1 247.9c-15.5-37.3-37.6-70.6-65.7-98.9-54.4-54.8-125.8-85-201-85-85.7 0-166 39-221.4 107.4C456.6 103 376.3 64 290.6 64c-75.1 0-146.5 30.4-201.1 85.6-28.2 28.5-50.4 61.9-65.8 99.3-16 38.8-24 79.9-23.6 122.2 0.7 91.7 40.1 177.2 108.1 234.8 3.1 2.6 6 5.1 8.9 7.8 14.9 13.4 58 52.8 112.6 102.7 93.5 85.5 209.9 191.9 257.5 234.2 7 6.1 15.8 9.5 24.9 9.5 9.2 0 18.1-3.4 24.9-9.5 34.5-30.7 105.8-95.9 181.4-165 74.2-67.8 150.9-138 195.8-178.2 69.5-57.9 109.6-144.4 109.9-237.3 0.1-42.5-8-83.6-24-122.2z"
+   fill="#8a8a8a"></path>
+</svg>
+
+      </i>
+    </span><span class="author">
+        Weixin
+        
+      </span></span>
+
+  
+  
+
+  
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont">
+        
+        <svg class="icon" viewBox="0 0 1024 1024" version="1.1"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  width="35" height="35">
+  <path d="M510.866688 227.694839 95.449397 629.218702l235.761562 0-2.057869 328.796468 362.40389 0L691.55698 628.188232l241.942331-3.089361L510.866688 227.694839zM63.840492 63.962777l894.052392 0 0 131.813095L63.840492 195.775872 63.840492 63.962777 63.840492 63.962777zM63.840492 63.962777"></path>
+</svg>
+
+      </i>
+    </div>
+  </div>
+  
+<script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+
+
+
+
+<script type="text/javascript" src="/js/main.638251f4230630f0335d8c6748e53a96f94b72670920b60c09a56fdc8bece214.js" integrity="sha256-Y4JR9CMGMPAzXYxnSOU6lvlLcmcJILYMCaVv3Ivs4hQ=" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <script type="text/javascript" src="/js/load-photoswipe.js"></script>
+    <script type="text/javascript" src="/lib/photoswipe/photoswipe.min.js"></script>
+    <script type="text/javascript" src="/lib/photoswipe/photoswipe-ui-default.min.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <script>
+    $("#openSearch, #openSearchMobile").click(function(){
+      $(".modal-dialog").addClass("visible");
+    });
+
+    $("#closeSearch").click(function(){
+      $(".modal-dialog").removeClass("visible");
+    });
+
+    $(document).click(function(event) {
+    
+      if (!$(event.target).closest(".modal-content, #openSearch, #openSearchMobile").length) {
+        $("body").find(".modal-dialog").removeClass("visible");
+      }
+    });
+  </script>
+
+
+
+
+
+</body>
+</html>

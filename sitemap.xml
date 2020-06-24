@@ -65,6 +65,20 @@
   </url>
   
   <url>
+    <loc>https://yanweixin.github.io/categories/linux/</loc>
+    <lastmod>2019-12-24T14:05:10+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://yanweixin.github.io/post/systemd-usage/</loc>
+    <lastmod>2019-12-24T14:05:10+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>https://yanweixin.github.io/post/ssh-usage/</loc>
     <lastmod>2019-11-20T08:52:44+08:00</lastmod>
     <changefreq>weekly</changefreq>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>linux on A Programmer&#39;s Home</title>
+    <link>https://yanweixin.github.io/categories/linux/</link>
+    <description>Recent content in linux on A Programmer&#39;s Home</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 24 Dec 2019 14:05:10 +0800</lastBuildDate>
+    
+	<atom:link href="https://yanweixin.github.io/categories/linux/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Systemd Usage</title>
+      <link>https://yanweixin.github.io/post/systemd-usage/</link>
+      <pubDate>Tue, 24 Dec 2019 14:05:10 +0800</pubDate>
+      
+      <guid>https://yanweixin.github.io/post/systemd-usage/</guid>
+      <description>Systemd Systemd基础 Unit管理 systemd管理和作用的基本对象是一个&amp;quot;Unit&amp;rdquo;，其中最常见的就是“service</description>
+    </item>
+    
+  </channel>
+</rss>

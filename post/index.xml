@@ -48,6 +48,15 @@
     </item>
     
     <item>
+      <title>Systemd Usage</title>
+      <link>https://yanweixin.github.io/post/systemd-usage/</link>
+      <pubDate>Tue, 24 Dec 2019 14:05:10 +0800</pubDate>
+      
+      <guid>https://yanweixin.github.io/post/systemd-usage/</guid>
+      <description>Systemd Systemd基础 Unit管理 systemd管理和作用的基本对象是一个&amp;quot;Unit&amp;rdquo;，其中最常见的就是“service</description>
+    </item>
+    
+    <item>
       <title>SSH使用</title>
       <link>https://yanweixin.github.io/post/ssh-usage/</link>
       <pubDate>Wed, 20 Nov 2019 08:52:44 +0800</pubDate>
