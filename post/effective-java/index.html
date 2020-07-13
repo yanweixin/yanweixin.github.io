@@ -69,7 +69,7 @@
 <meta itemprop="description" content="高性能Java 一天一个Effective Java小技巧 创建与销毁对象 用静态工厂方法取代构造器 例子： 1 2 3 public static Boolean valueOf(boolean b) { return b ? Boolean.TRUE : Boolean.FALSE; } 使用静态工">
 <meta itemprop="datePublished" content="2020-06-20T14:49:21&#43;08:00" />
 <meta itemprop="dateModified" content="2020-06-20T14:49:21&#43;08:00" />
-<meta itemprop="wordCount" content="1004">
+<meta itemprop="wordCount" content="5909">
 
 
 
@@ -396,8 +396,8 @@ if (!doNotTrack) {
             <a href="https://yanweixin.github.io/categories/java/"> java </a>
             
           </div>
-        <span class="more-meta"> 1004 words </span>
-          <span class="more-meta"> 3 min read </span>
+        <span class="more-meta"> 5909 words </span>
+          <span class="more-meta"> 12 min read </span>
 
         
         
@@ -418,10 +418,20 @@ if (!doNotTrack) {
       <ul>
         <li><a href="#用静态工厂方法取代构造器">用静态工厂方法取代构造器</a></li>
         <li><a href="#构造器参数组合比较多时使用builder模式">构造器参数组合比较多时使用Builder模式</a></li>
+        <li><a href="#使用构造器或枚举类型强制singleton属性">使用构造器或枚举类型强制singleton属性</a></li>
+        <li><a href="#使用私有构造器禁止实例化">使用私有构造器禁止实例化</a></li>
+        <li><a href="#依赖注入优于硬连接资源">依赖注入优于硬连接资源</a></li>
+        <li><a href="#避免创建不必要的对象">避免创建不必要的对象</a></li>
+        <li><a href="#消除过期对象引用">消除过期对象引用</a></li>
       </ul>
     </li>
     <li><a href="#共有方法">共有方法</a></li>
-    <li><a href="#heading"></a></li>
+    <li><a href="#序列化">序列化</a>
+      <ul>
+        <li><a href="#推荐的java序列化替代方法">推荐的Java序列化替代方法</a></li>
+        <li><a href="#使用enum代替readresolve控制实例">使用enum代替readResolve控制实例</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
   </div>
@@ -565,8 +575,566 @@ if (!doNotTrack) {
 </code></pre></td></tr></table>
 </div>
 </div><p>Builder模式可读性更好，也适合继承。</p>
+<h3 id="使用构造器或枚举类型强制singleton属性">使用构造器或枚举类型强制singleton属性</h3>
+<p>singleton就是指类只能实例化一次。</p>
+<p>有两种常见的方法来实现singleton。一是私有化构造器，并提供公有的静态成员访问。可以使用final成员变量：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// Singleton with public final field
+</span><span class="c1"></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Elvis</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Elvis</span> <span class="n">INSTANCE</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Elvis</span><span class="o">();</span>
+    <span class="kd">private</span> <span class="nf">Elvis</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">leaveTheBuilding</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>除非使用<code>AccessibleObject.setAccessible</code>方法，否则没有办法访问私有构造器。可以修改构造器在第二次实例化的时候抛出异常以避免这种情况。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">private</span> <span class="nf">Elvis</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">INSTANCE</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="n">IllegalStateException</span><span class="o">(</span><span class="s">&#34;Only one instance may be created&#34;</span><span class="o">);</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;Object is created.&#34;</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>也可以使用静态工厂方法来实现singleton</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// Singleton with static factory
+</span><span class="c1"></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Elvis</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Elvis</span> <span class="n">INSTANCE</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Elvis</span><span class="o">();</span>
+    <span class="kd">private</span> <span class="nf">Elvis</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Elvis</span> <span class="nf">getInstance</span><span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="n">INSTANCE</span><span class="o">;</span> <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">leaveTheBuilding</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这种公有静态成员变量的方式主要优点是简单清晰，通过API就可以知道相应的类是singleton，因为公有的静态成员是final的。而静态工厂方法的优点是可以灵活地决定是否遵从singleton而无需变动API，也可以实现泛型，最后静态工厂方法可以使用method reference如Elvis::instance。</p>
+<p>如果类需要进行序列化，则上述方法无法保证单一实例，这种情况下参考<a href="#%E4%BD%BF%E7%94%A8enum%E4%BB%A3%E6%9B%BFreadresolve%E6%8E%A7%E5%88%B6%E5%AE%9E%E4%BE%8B">使用enum代替readResolve控制实例</a>，给类添加readResolve方法，并将实例字段标记为transient。</p>
+<p>第三种方式是声明一个单元素枚举类型：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// Enum singleton - the preferred approach
+</span><span class="c1"></span><span class="kd">public</span> <span class="kd">enum</span> <span class="n">Elvis</span> <span class="o">{</span>
+    <span class="n">INSTANCE</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">leaveTheBuilding</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这种方式最好，但是如果必须继承除Enum以外的类则无法使用。</p>
+<h3 id="使用私有构造器禁止实例化">使用私有构造器禁止实例化</h3>
+<p>例如有些工具类只需提供静态方法API，而无需实例化。如果将类标记为abstract虽然可以避免实例化，但是让人误以为需要继承。Java默认提供无参构造器，可以提供无参的私有构造器以覆盖默认行为，达到无法实例化的目的，如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// Noninstantiable utility class
+</span><span class="c1"></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">UtilityClass</span> <span class="o">{</span>
+    <span class="c1">// Suppress default constructor for noninstantiability
+</span><span class="c1"></span>    <span class="kd">private</span> <span class="nf">UtilityClass</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="n">AssertionError</span><span class="o">();</span>
+    <span class="o">}</span>
+    <span class="o">...</span> <span class="c1">// Remainder omitted
+</span><span class="c1"></span><span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>AssertionError不是必需的，但是可以避免内部误调用。</p>
+<p>这样做的副作用就是无法被继承，因为子类没有可以使用的父类构造器。</p>
+<h3 id="依赖注入优于硬连接资源">依赖注入优于硬连接资源</h3>
+<p>很多类都依赖一个或多个基础资源，如spell cheker依赖dictionary，如下两个错误都使用方式：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// Inappropriate use of static utility - inflexible &amp; untestable!
+</span><span class="c1"></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SpellChecker</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Lexicon</span> <span class="n">dictionary</span> <span class="o">=</span> <span class="o">...;</span>
+
+    <span class="kd">private</span> <span class="nf">SpellChecker</span><span class="o">()</span> <span class="o">{}</span> <span class="c1">// Noninstantiable
+</span><span class="c1"></span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">boolean</span> <span class="nf">isValid</span><span class="o">(</span><span class="n">String</span> <span class="n">word</span><span class="o">)</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">suggestions</span><span class="o">(</span><span class="n">String</span> <span class="n">typo</span><span class="o">)</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1">// Inappropriate use of singleton - inflexible &amp; untestable!
+</span><span class="c1"></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SpellChecker</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Lexicon</span> <span class="n">dictionary</span> <span class="o">=</span> <span class="o">...;</span>
+
+    <span class="kd">private</span> <span class="nf">SpellChecker</span><span class="o">(...)</span> <span class="o">{}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">INSTANCE</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SpellChecker</span><span class="o">(...);</span>
+
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isValid</span><span class="o">(</span><span class="n">String</span> <span class="n">word</span><span class="o">)</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+    <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">suggestions</span><span class="o">(</span><span class="n">String</span> <span class="n">typo</span><span class="o">)</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>上述方法都假定只有一个值得使用的字典，但是通常不同语言有自己的字典。也许你会将字典字段设为非final可修改，但是这样既容易出错也无法满足并发设置。<strong>静态工具程序类和单实例不适合其行为由基础资源参数化的类</strong>。</p>
+<p>要处理多实例，每个实例使用自己的资源，一个简单的方式是在创建实例时将资源作为参数传给构造器，这就是依赖注入的一种形式。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// Dependency injection provides flexibility and testability
+</span><span class="c1"></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SpellChecker</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">Lexicon</span> <span class="n">dictionary</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">SpellChecker</span><span class="o">(</span><span class="n">Lexicon</span> <span class="n">dictionary</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">dictionary</span> <span class="o">=</span> <span class="n">Objects</span><span class="o">.</span><span class="na">requireNonNull</span><span class="o">(</span><span class="n">dictionary</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isValid</span><span class="o">(</span><span class="n">String</span> <span class="n">word</span><span class="o">)</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+    <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">suggestions</span><span class="o">(</span><span class="n">String</span> <span class="n">typo</span><span class="o">)</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>此模式的变体就是将资源工厂传给构造器，工厂就是可以重复创建某种类型实例的对象。<code>Supplier&lt;T&gt;</code>接口非常适合代表工厂，接受<code>Supplier&lt;T&gt;</code>输入的方法应该使用bounded wildcard type限制参数，以传入创建指定类型子类型的工厂，如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="n">Mosaic</span> <span class="nf">create</span><span class="o">(</span><span class="n">Supplier</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">Tile</span><span class="o">&gt;</span> <span class="n">tileFactory</span><span class="o">)</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>如果在项目中有成千上万的依赖时，就可以借助一些依赖注入的框架，如Spring。</p>
+<h3 id="避免创建不必要的对象">避免创建不必要的对象</h3>
+<p>重复使用单个对象比需要时创建等价对象要合适，如果一个对象是immutable那么永远可以复用。</p>
+<p>一个极端的例子如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="n">String</span> <span class="n">s</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">(</span><span class="s">&#34;bikini&#34;</span><span class="o">);</span>  <span class="c1">// DON&#39;T DO THIS!”
+</span></code></pre></td></tr></table>
+</div>
+</div><p>&ldquo;bikini&quot;本身就是一个String实例，与构造器创建的对象是一样的，改写为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="n">String</span> <span class="n">s</span> <span class="o">=</span> <span class="s">&#34;bikini&#34;</span><span class="o">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>而且，这样可以让虚拟机内其他使用到此字符串字面量的代码复用此对象。</p>
+<p>对于一些同时提供了静态工厂方法和构造器的immutable类，可以使用工厂方法避免重复创建对象。例如Boolean.valueOf(String)就优于Boolean(String)。除了immutable对象，如果可以确定不会修改的mutable对象也可以复用。</p>
+<p>如果创建对象的代价很大，那么可以将这些对象缓存。例如判断字符串是否是罗马数字：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// Performance can be greatly improved!
+</span><span class="c1"></span><span class="kd">static</span> <span class="kt">boolean</span> <span class="nf">isRomanNumeral</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="na">matches</span><span class="o">(</span><span class="s">&#34;^(?=.)M*(C[MD]|D?C{0,3})&#34;</span>
+            <span class="o">+</span> <span class="s">&#34;(X[CL]|L?X{0,3})(I[XV]|V?I{0,3})$&#34;</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>尽管String.matches是判断字符串是否包含特定正则表达式的最简单方式，问题是此方法内部创建了一个只使用一次就回收的Pattern对象，创建此Pattern对象的开销很大，如果大量重复使用就对性能有很大影响。可以在实例化时缓存此对象：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// Reusing expensive object for improved performance
+</span><span class="c1"></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">RomanNumerals</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Pattern</span> <span class="n">ROMAN</span> <span class="o">=</span> <span class="n">Pattern</span><span class="o">.</span><span class="na">compile</span><span class="o">(</span>
+            <span class="s">&#34;^(?=.)M*(C[MD]|D?C{0,3})&#34;</span>
+            <span class="o">+</span> <span class="s">&#34;(X[CL]|L?X{0,3})(I[XV]|V?I{0,3})$&#34;</span><span class="o">);</span>
+
+    <span class="kd">static</span> <span class="kt">boolean</span> <span class="nf">isRomanNumeral</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">ROMAN</span><span class="o">.</span><span class="na">matcher</span><span class="o">(</span><span class="n">s</span><span class="o">).</span><span class="na">matches</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>如果此方法从不被调用，那么ROMAN字段的初始化就没有用，可以采用<a href="#%E5%BB%B6%E8%BF%9F%E5%88%9D%E5%A7%8B%E5%8C%96">延迟初始化</a>，不过此方法要慎重使用，因为很多时候此方式除了增加实现复杂度没有可测量的性能提升。</p>
+<p>例如Map接口的keySet方法看似会每次创建新的Set实例，但实际上同一个Map对象可能返回相同的Set实例。虽然返回的Set实例通常是可变的，但所有返回的对象在功能上都是相同的：当一个返回的对象发生更改时，其他所有对象也会发生变化，因为它们都由同一个Map实例支持。 虽然创建keySet对象的多个实例在很大程度上是无害的，但是这是不必要的，没有任何好处。</p>
+<p>创建不必要对象的另一种方式是autoboxing：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// Hideously slow! Can you spot the object creation?
+</span><span class="c1"></span><span class="kd">private</span> <span class="kd">static</span> <span class="kt">long</span> <span class="nf">sum</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">Long</span> <span class="n">sum</span> <span class="o">=</span> <span class="n">0L</span><span class="o">;</span>
+    <span class="k">for</span> <span class="o">(</span><span class="kt">long</span> <span class="n">i</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span>
+        <span class="n">sum</span> <span class="o">+=</span> <span class="n">i</span><span class="o">;</span>
+
+    <span class="k">return</span> <span class="n">sum</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>程序创建了2^31个不必要的Long对象，如果将Long替换为long性能能提升很多。所以优先使用原始类型，注意无意识的autoboxing。</p>
+<p>这里的目的不是说创建对象的代价很大，应该避免。事实上，在现代JVM上创建小对象是很经济的。相反，除非池中的对象非常重，否则通过维护自己的对象池来避免创建对象是一个坏主意。 证明对象池合理的对象的经典示例是数据库连接。 建立连接的成本非常高，以至于可以重用这些对象。 但是，一般而言，维护自己的对象池会使代码混乱，增加内存占用，并损害性能。 现代JVM实现具有高度优化的垃圾收集器，可以轻松地在轻量级对象上胜过此类对象池。</p>
+<h3 id="消除过期对象引用">消除过期对象引用</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// Can you spot the &#34;memory leak&#34;?
+</span><span class="c1"></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Stack</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">Object</span><span class="o">[]</span> <span class="n">elements</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="n">DEFAULT_INITIAL_CAPACITY</span> <span class="o">=</span> <span class="n">16</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">Stack</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Object</span><span class="o">[</span><span class="n">DEFAULT_INITIAL_CAPACITY</span><span class="o">];</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">push</span><span class="o">(</span><span class="n">Object</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">ensureCapacity</span><span class="o">();</span>
+        <span class="n">elements</span><span class="o">[</span><span class="n">size</span><span class="o">++]</span> <span class="o">=</span> <span class="n">e</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="n">Object</span> <span class="nf">pop</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">size</span> <span class="o">==</span> <span class="n">0</span><span class="o">)</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="n">EmptyStackException</span><span class="o">();</span>
+        <span class="k">return</span> <span class="n">elements</span><span class="o">[--</span><span class="n">size</span><span class="o">];</span>
+    <span class="o">}</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * Ensure space for at least one more element, roughly
+</span><span class="cm">     * doubling the capacity each time the array needs to grow.
+</span><span class="cm">     */</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">ensureCapacity</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">elements</span><span class="o">.</span><span class="na">length</span> <span class="o">==</span> <span class="n">size</span><span class="o">)</span>
+            <span class="n">elements</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">copyOf</span><span class="o">(</span><span class="n">elements</span><span class="o">,</span> <span class="n">2</span> <span class="o">*</span> <span class="n">size</span> <span class="o">+</span> <span class="n">1</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>如果堆栈增大然后缩小，那么即使使用该堆栈的程序没有更多引用，从堆栈弹出的对象也不会被垃圾回收。这是因为堆栈维护了对这些对象的过时引用。过时的引用只是一个引用，它将不再被取消引用。在这种情况下，元素数组“活动部分”之外的所有引用均已过时。活动部分由索引小于大小的元素组成。</p>
+<p>垃圾收集语言（更恰当地称为非故意对象保留）中的内存泄漏是隐患。如果意外地保留了对象引用，则不仅该对象将从垃圾回收中排除，而且该对象引用的任何对象也将被排除在外，依此类推。即使无意中仅保留了少数几个对象引用，也可能会阻止许多很多对象被垃圾回收，从而对性能产生潜在的巨大影响。</p>
+<p>此类问题的解决方法很简单：一旦引用过时，则将其清空。就我们的Stack类而言，对某个项目的引用在从堆栈中弹出后便会过时。更正版本：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="n">Object</span> <span class="nf">pop</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">size</span> <span class="o">==</span> <span class="n">0</span><span class="o">)</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="n">EmptyStackException</span><span class="o">();</span>
+    <span class="n">Object</span> <span class="n">result</span> <span class="o">=</span> <span class="n">elements</span><span class="o">[--</span><span class="n">size</span><span class="o">];</span>
+    <span class="n">elements</span><span class="o">[</span><span class="n">size</span><span class="o">]</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span> <span class="c1">// Eliminate obsolete reference
+</span><span class="c1"></span>    <span class="k">return</span> <span class="n">result</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>一般来说，如果类自己管理内存，就需要注意内存泄露。</p>
 <h2 id="共有方法">共有方法</h2>
-<h2 id="heading"></h2>
+<h2 id="序列化">序列化</h2>
+<h3 id="推荐的java序列化替代方法">推荐的Java序列化替代方法</h3>
+<p>序列化的一个基本问题是，其攻击面太大而无法保护，并且会不断增长：通过在ObjectInputStream上调用readObject方法，可以反序列化对象图。 该方法本质上是一个魔术构造函数，可以使该类实例化类路径上几乎任何类型的对象，只要该类型实现Serializable接口即可。 在反序列化字节流的过程中，此方法可以执行任何一种类型的代码，因此所有这些类型的代码都是攻击面的一部分。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// Deserialization bomb - deserializing this stream takes forever
+</span><span class="c1"></span><span class="kd">static</span> <span class="kt">byte</span><span class="o">[]</span> <span class="nf">bomb</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">Set</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="n">root</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="o">&lt;&gt;();</span>
+    <span class="n">Set</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="n">s1</span> <span class="o">=</span> <span class="n">root</span><span class="o">;</span>
+    <span class="n">Set</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="n">s2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="o">&lt;&gt;();</span>
+    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">100</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+        <span class="n">Set</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="n">t1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="o">&lt;&gt;();</span>
+        <span class="n">Set</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">&gt;</span> <span class="n">t2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="o">&lt;&gt;();</span>
+        <span class="n">t1</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">&#34;foo&#34;</span><span class="o">);</span> <span class="c1">// Make t1 unequal to t2
+</span><span class="c1"></span>        <span class="n">s1</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">t1</span><span class="o">);</span>  <span class="n">s1</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">t2</span><span class="o">);</span>
+        <span class="n">s2</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">t1</span><span class="o">);</span>  <span class="n">s2</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">t2</span><span class="o">);</span>
+        <span class="n">s1</span> <span class="o">=</span> <span class="n">t1</span><span class="o">;</span>
+        <span class="n">s2</span> <span class="o">=</span> <span class="n">t2</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="k">return</span> <span class="n">serialize</span><span class="o">(</span><span class="n">root</span><span class="o">);</span> <span class="c1">// Method omitted for brevity
+</span><span class="c1"></span><span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>对象图由201个HashSet实例组成，每个实例包含3个或更少的对象引用。 整个流的长度为5,744字节，问题在于，反序列化HashSet实例需要计算其元素的哈希码。 根哈希集的2个元素本身就是包含2个哈希集元素的哈希集，每个哈希集包含2个哈希集元素，依此类推，深度为100层。 因此，对集合进行反序列化将导致hashCode方法被调用2^100次以上。 除反序列化将永远持续的事实外，反序列化器没有任何迹象表明存在任何问题。 生成的对象很少，并且堆栈深度是有界的。</p>
+<p>避免序列化攻击的最佳方法是永远不要反序列化任何东西。</p>
+<h3 id="使用enum代替readresolve控制实例">使用enum代替readResolve控制实例</h3>
+<p><a href="#%E4%BD%BF%E7%94%A8%E6%9E%84%E9%80%A0%E5%99%A8%E6%88%96%E6%9E%9A%E4%B8%BE%E7%B1%BB%E5%9E%8B%E5%BC%BA%E5%88%B6singleton%E5%B1%9E%E6%80%A7">使用构造器或枚举类型强制singleton属性</a>中提到如下例子，限制构造器访问以确保单一实例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Elvis</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Elvis</span> <span class="n">INSTANCE</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Elvis</span><span class="o">();</span>
+    <span class="kd">private</span> <span class="nf">Elvis</span><span class="o">()</span> <span class="o">{</span>  <span class="o">...</span> <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">leaveTheBuilding</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>但是在实现Serializable接口后，此类将不再保证单一实例。无论使用默认还是自定义序列化方法，或是提供显式readObject方法。显式或默认的readObject方法都会返回新创建的对象，而不是初始化时的对象。</p>
+<p>readResolve功能允许替换readObject创建的对象。如果要反序列化的对象的类定义了带有正确声明的readResolve方法，则在对新创建的对象进行反序列化后将调用此方法。 然后，此方法返回的对象引用将代替新创建的对象而返回。 在此功能的大多数使用中，不会保留对新创建对象的引用，因此该对象立即可以进行垃圾收集。</p>
+<p>因此上述例子增加了如下内容后就能确保singleton：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// readResolve for instance control - you can do better!
+</span><span class="c1"></span><span class="kd">private</span> <span class="n">Object</span> <span class="nf">readResolve</span><span class="o">()</span> <span class="o">{</span>
+    <span class="c1">// Return the one true Elvis and let the garbage collector
+</span><span class="c1"></span>    <span class="c1">// take care of the Elvis impersonator.
+</span><span class="c1"></span>    <span class="k">return</span> <span class="n">INSTANCE</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>该方法忽略反序列化的对象，返回在初始化类时创建的独特的Elvis实例。 因此，Elvis实例的序列化形式不需要包含任何实际数据； 所有实例字段都应声明为transient。 实际上，如果依赖readResolve进行实例控制，则必须将所有具有对象引用类型的实例字段声明为transient。 否则，攻击者可能会使用某种类似于条款88中的MutablePeriod攻击的技术，在运行反序列化对象的readResolve方法之前确保对其的引用。</p>
+<p>此攻击的原理很简单，如果包含非transient的字段，这些字段的内容会在readResolve方法运行前进行反序列化。具体可以参考如下例子：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// Broken singleton - has nontransient object reference field!
+</span><span class="c1"></span><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Elvis</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Elvis</span> <span class="n">INSTANCE</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Elvis</span><span class="o">();</span>
+    <span class="kd">private</span> <span class="nf">Elvis</span><span class="o">()</span> <span class="o">{</span> <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="n">String</span><span class="o">[]</span> <span class="n">favoriteSongs</span> <span class="o">=</span>
+            <span class="o">{</span> <span class="s">&#34;Hound Dog&#34;</span><span class="o">,</span> <span class="s">&#34;Heartbreak Hotel&#34;</span> <span class="o">};</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">printFavorites</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">favoriteSongs</span><span class="o">));</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="n">Object</span> <span class="nf">readResolve</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">INSTANCE</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ElvisStealer</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="o">{</span>
+    <span class="kd">static</span> <span class="n">Elvis</span> <span class="n">impersonator</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">Elvis</span> <span class="n">payload</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="n">Object</span> <span class="nf">readResolve</span><span class="o">()</span> <span class="o">{</span>
+        <span class="c1">// Save a reference to the &#34;unresolved&#34; Elvis instance
+</span><span class="c1"></span>        <span class="n">impersonator</span> <span class="o">=</span> <span class="n">payload</span><span class="o">;</span>
+
+        <span class="c1">// Return object of correct type for favoriteSongs field
+</span><span class="c1"></span>        <span class="k">return</span> <span class="k">new</span> <span class="n">String</span><span class="o">[]</span> <span class="o">{</span> <span class="s">&#34;A Fool Such as I&#34;</span> <span class="o">};</span>
+    <span class="o">}</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>可以将favoriteSongs声明为transient来避免此攻击，但是最好将Elvis变成单元素枚举类型来解决此问题，如<a href="#%E4%BD%BF%E7%94%A8%E6%9E%84%E9%80%A0%E5%99%A8%E6%88%96%E6%9E%9A%E4%B8%BE%E7%B1%BB%E5%9E%8B%E5%BC%BA%E5%88%B6singleton%E5%B1%9E%E6%80%A7">使用构造器或枚举类型强制singleton属性</a>中所说。</p>
+<p>如果序列化实例控制的类写为枚举类型，Java就能保证除了声明的常量外不存在其他实例。除非攻击者使用AccessibleObject.setAccessible，但那时攻击者其实拥有执行任意本地代码的权限。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="c1">// Enum singleton - the preferred approach
+</span><span class="c1"></span><span class="kd">public</span> <span class="kd">enum</span> <span class="n">Elvis</span> <span class="o">{</span>
+    <span class="n">INSTANCE</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="n">String</span><span class="o">[]</span> <span class="n">favoriteSongs</span> <span class="o">=</span>
+        <span class="o">{</span> <span class="s">&#34;Hound Dog&#34;</span><span class="o">,</span> <span class="s">&#34;Heartbreak Hotel&#34;</span> <span class="o">};</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">printFavorites</span><span class="o">()</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">favoriteSongs</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>如果编译时无法知道实例类型，就无法使用枚举类型，这时只能使用readResolve方法。同时readResolve方法的权限也很重要，如果类是final的，readResolve应该修饰为private，其他情况下，如果有子类继承，那么子类需要重写该方法，否则序列化的实例就是父类。</p>
+<p>总之，尽可能使用枚举类型保证实例控制，如果没办法，则类中的实例字段必须为primitive或transient。</p>
 
     </div>
 

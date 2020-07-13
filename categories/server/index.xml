@@ -17,7 +17,7 @@
       <pubDate>Fri, 19 Jun 2020 21:44:42 +0800</pubDate>
       
       <guid>https://yanweixin.github.io/post/podman-tutorial/</guid>
-      <description>Podman 安装与使用 Ubuntu安装 官方安装教程 1 2 3 4 5 . /etc/os-release sudo sh -c &amp;#34;echo &amp;#39;deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /&amp;#39; &amp;gt; /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list&amp;#34; curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/Release.key | sudo apt-key add - sudo apt-get update -qq sudo apt-get -qq -y install podman 由于按照上述方法未安装成功，按照</description>
+      <description>Podman 安装与使用 Ubuntu安装 官方安装教程 1 2 3 4 5 . /etc/os-release sudo sh -c &amp;#34;echo &amp;#39;deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /&amp;#39; &amp;gt; /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list&amp;#34; curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/Release.key | sudo apt-key add - sudo apt-get update -qq sudo apt-get -qq -y install podman 查看是否安装成功： 1 podman info 使用 po</description>
     </item>
     
     <item>
