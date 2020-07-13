@@ -37,14 +37,14 @@
   </url>
   
   <url>
-    <loc>https://yanweixin.github.io/post/podman-tutorial/</loc>
+    <loc>https://yanweixin.github.io/categories/container/</loc>
     <lastmod>2020-06-19T21:44:42+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://yanweixin.github.io/categories/server/</loc>
+    <loc>https://yanweixin.github.io/post/podman-tutorial/</loc>
     <lastmod>2020-06-19T21:44:42+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -59,6 +59,13 @@
   
   <url>
     <loc>https://yanweixin.github.io/post/nginx-usage/</loc>
+    <lastmod>2020-01-21T14:56:29+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://yanweixin.github.io/categories/server/</loc>
     <lastmod>2020-01-21T14:56:29+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
